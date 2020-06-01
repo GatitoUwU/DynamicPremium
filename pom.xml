@@ -6,7 +6,7 @@
 
     <groupId>me.gatogamer</groupId>
     <artifactId>DynamicPremium</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.3-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>DynamicPremium</name>
@@ -67,6 +67,11 @@
             <artifactId>bungeecord-api</artifactId>
             <version>1.15-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180130</version>
         </dependency>
     </dependencies>
 </project>

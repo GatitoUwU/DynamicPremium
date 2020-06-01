@@ -1,6 +1,6 @@
 LobbyServer: "l1"
 AuthServers:
-  - "lauth"
+  - "al1"
 AllowedCommands:
   - "/l"
   - "/login"
@@ -8,7 +8,10 @@ AllowedCommands:
   - "/register"
 SendLobbyMessage: "&a¡Enviándote al lobby!"
 DeniedCommand: "&c¡Debes estar autentificado para ejecutar este comando!"
-Premium Toggle:
-  on: "&a¡Has activado el modo premium!"
-  off: "&a¡Has desactivado el modo premium!"
 ConnectionCancelled: "&c¡La conexión fue desconectada debido a que eres premium pero no estás autentificado en Mojang!"
+Alert:
+  NoPremium: "&c¡Debes ser premium para hacer esto! (esto puede ser un error por RateLimit de Mojang)"
+  PlayerOnly: "&c¡Debes ser un usuario para hacer esto!"
+  Enabled: "&a¡Has activado el modo premium!"
+  Disabled: "&a¡Has desactivado el modo premium!"
+  Cooldown: "&a¡Debes esperar para poder hacer esto!"

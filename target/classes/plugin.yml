@@ -1,4 +1,5 @@
 name: DynamicPremium
-version: 1.0.1-SNAPSHOT
+version: 1.0.3-RELEASE
 main: me.gatogamer.dynamicpremium.DynamicPremium
 description: A simple dynamic premium auth plugin.
+author: "gatogamer_ (Dilan)"

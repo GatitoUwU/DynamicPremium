@@ -1,6 +1,7 @@
+me\gatogamer\dynamicpremium\cache\Cache.class
 me\gatogamer\dynamicpremium\commands\PremiumCommand.class
-me\gatogamer\dynamicpremium\listeners\Listeners$1.class
 me\gatogamer\dynamicpremium\config\ConfigCreator.class
+me\gatogamer\dynamicpremium\cache\CacheManager.class
 me\gatogamer\dynamicpremium\config\ConfigUtils.class
 me\gatogamer\dynamicpremium\listeners\Listeners.class
 me\gatogamer\dynamicpremium\DynamicPremium.class

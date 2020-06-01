@@ -21,14 +21,14 @@ public final class DynamicPremium extends Plugin {
         ProxyServer.getInstance().getConsole().sendMessage(c("&cLoading DynamicPremium by gatogamer#1111"));
 
         ProxyServer.getInstance().getConsole().sendMessage(c("&cLoading configs by iSnakeBuzz_"));
-        ConfigCreator.get().setupBungee(this, "PremiumUsers");
+        setConfigUtils(new ConfigUtils());
         ConfigCreator.get().setupBungee(this, "Settings");
+        ConfigCreator.get().setupBungee(this, "PremiumUsers");
 
         ProxyServer.getInstance().getConsole().sendMessage(c("&cLoading Commands"));
         getProxy().getPluginManager().registerCommand(this, new PremiumCommand("premium"));
         ProxyServer.getInstance().getConsole().sendMessage(c("&cCommands loaded"));
 
-        setConfigUtils(new ConfigUtils());
 
         ProxyServer.getInstance().getConsole().sendMessage(c("&cLoading Listeners"));
         getProxy().getPluginManager().registerListener(this, new Listeners());
@@ -42,7 +42,7 @@ public final class DynamicPremium extends Plugin {
         // Plugin shutdown logic
     }
 
-    public static boolean isPlayerPremiumEnabled (String name) {
+    public static boolean playerHasPremiumEnabled (String name) {
         Configuration premiumUsers = DynamicPremium.getInstance().getConfigUtils().getConfig(instance, "PremiumUsers");
         return premiumUsers.getStringList("PremiumUsers").contains(name);
     }
