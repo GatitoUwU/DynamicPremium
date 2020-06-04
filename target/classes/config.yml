@@ -1,0 +1,14 @@
+####################################
+# DynamicPremium by gatogamer#1111 #
+#          Spigot version          #
+####################################
+
+Debug: false
+
+Authentified: "&aHas sido autentificado gracias a que eres premium."
+MySQL:
+  Host: "127.0.0.1"
+  Port: "3306"
+  Username: "TuPutaMadre"
+  Password: "Alguna"
+  Database: "Yo que sé flaco"

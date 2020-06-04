@@ -1,11 +1,13 @@
-package me.gatogamer.dynamicpremium.commands;
+package me.gatogamer.dynamicpremium.bungee.commands;
 
-import me.gatogamer.dynamicpremium.DynamicPremium;
-import me.gatogamer.dynamicpremium.cache.Cache;
-import me.gatogamer.dynamicpremium.cache.CacheManager;
-import me.gatogamer.dynamicpremium.config.ConfigUtils;
+import me.gatogamer.dynamicpremium.bungee.DynamicPremium;
+import me.gatogamer.dynamicpremium.bungee.config.ConfigUtils;
+import me.gatogamer.dynamicpremium.bungee.database.Database;
+import me.gatogamer.dynamicpremium.shared.cache.Cache;
+import me.gatogamer.dynamicpremium.shared.cache.CacheManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.config.Configuration;
@@ -21,36 +23,32 @@ public class PremiumCommand extends Command {
         super(name);
     }
 
-
     @Override
     public void execute(CommandSender sender, String[] args) {
         Configuration mainSettings = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
         if (sender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) sender;
-            Cache cache = CacheManager.getCacheOrGetNew(player);
-            if (!elapsed(3000L, cache.lastUsage)) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.Cooldown")));
-                return;
-            }
-            String mojangId = getOnlineUUID(player.getName());
-            Configuration premiums = ConfigUtils.getConfig(DynamicPremium.getInstance(), "PremiumUsers");
-            List<String> premiumUsers = premiums.getStringList("PremiumUsers");
-            cache.lastUsage = System.currentTimeMillis();
-            if (mojangId != null) {
-                if (premiumUsers.contains(player.getName())) {
+            ProxyServer.getInstance().getScheduler().runAsync(DynamicPremium.getInstance(), () -> {
+                Database database = DynamicPremium.getInstance().getDatabaseManager().getDatabase();
+                if (database.playerIsPremium(player.getName())) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.Disabled")));
-
-                    premiumUsers.remove(player.getName());
+                    database.removePlayer(player.getName());
                 } else {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.Enabled")));
-
-                    premiumUsers.add(player.getName());
+                    Cache cache = CacheManager.getCacheOrGetNew(player.getName());
+                    if (!elapsed(mainSettings.getLong("PremiumCommandDelay"), cache.lastUsage)) {
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.Cooldown")));
+                        return;
+                    }
+                    cache.lastUsage = System.currentTimeMillis();
+                    String mojangId = getOnlineUUID(player.getName());
+                    if (mojangId != null) {
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.Enabled")));
+                        database.addPlayer(player.getName());
+                    } else {
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.NoPremium")));
+                    }
                 }
-                premiums.set("PremiumUsers", premiumUsers);
-                DynamicPremium.getInstance().getConfigUtils().saveConfig(premiums, "PremiumUsers");
-            } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.NoPremium")));
-            }
+            });
         } else {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.PlayerOnly")));
         }

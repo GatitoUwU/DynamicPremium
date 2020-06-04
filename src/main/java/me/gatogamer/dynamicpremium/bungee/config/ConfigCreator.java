@@ -1,4 +1,4 @@
-package me.gatogamer.dynamicpremium.config;
+package me.gatogamer.dynamicpremium.bungee.config;
 
 import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.plugin.Plugin;

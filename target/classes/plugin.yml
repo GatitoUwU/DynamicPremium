@@ -1,5 +1,5 @@
 name: DynamicPremium
-version: 1.0.3-RELEASE
-main: me.gatogamer.dynamicpremium.DynamicPremium
+version: 1.0.4-RELEASE
+main: me.gatogamer.dynamicpremium.spigot.DynamicPremium
 description: A simple dynamic premium auth plugin.
 author: "gatogamer_ (Dilan)"

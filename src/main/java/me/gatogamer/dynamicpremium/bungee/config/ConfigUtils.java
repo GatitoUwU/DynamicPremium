@@ -1,6 +1,6 @@
-package me.gatogamer.dynamicpremium.config;
+package me.gatogamer.dynamicpremium.bungee.config;
 
-import me.gatogamer.dynamicpremium.DynamicPremium;
+import me.gatogamer.dynamicpremium.bungee.DynamicPremium;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
