@@ -18,4 +18,3 @@ me\gatogamer\dynamicpremium\shared\cache\CacheManager.class
 me\gatogamer\dynamicpremium\bungee\DynamicPremium.class
 me\gatogamer\dynamicpremium\bungee\config\ConfigUtils.class
 me\gatogamer\dynamicpremium\bungee\listeners\Listeners.class
-me\gatogamer\dynamicpremium\spigot\listener\LoginListener.class

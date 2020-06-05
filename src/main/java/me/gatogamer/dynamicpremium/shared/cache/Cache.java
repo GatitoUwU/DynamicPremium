@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Cache {
 
-    public long lastUsage = 0;
+    public long lastUsage;
 
     //Spigot starts \\
     private boolean authenticated;
@@ -15,7 +15,8 @@ public class Cache {
 
 
     public Cache() {
-
+        lastUsage = 0;
+        authenticated = false;
     }
 
 }

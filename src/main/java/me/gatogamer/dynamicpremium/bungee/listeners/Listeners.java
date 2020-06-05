@@ -37,7 +37,7 @@ public class Listeners implements Listener {
         e.registerIntent(plugin);
         UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
 
-        if (DynamicPremium.playerHasPremiumEnabled(pendingConnection.getName())) {
+        if (plugin.getDatabaseManager().getDatabase().playerIsPremium(pendingConnection.getName())) {
             e.completeIntent(plugin);
             //.connect(ProxyServer.getInstance().getServerInfo(DynamicPremium.getInstance().getConfigUtils().getConfig(DynamicPremium.getInstance(), "Settings").getString("LobbyServer")));
             pendingConnection.setOnlineMode(true);
@@ -56,7 +56,8 @@ public class Listeners implements Listener {
     public void onServerChangeEvent(ServerConnectEvent e) {
         Configuration settings = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
         ProxiedPlayer proxiedPlayer = e.getPlayer();
-        if (DynamicPremium.playerHasPremiumEnabled(proxiedPlayer.getName())) {
+        DynamicPremium plugin = DynamicPremium.getInstance();
+        if (plugin.getDatabaseManager().getDatabase().playerIsPremium(proxiedPlayer.getName())) {
             if (settings.getString("LoginType").equals("DIRECT")) {
                 ServerInfo newTarget = ProxyServer.getInstance().getServerInfo(settings.getString("LobbyServer"));
                 if (settings.getStringList("AuthServers").contains(e.getTarget().getName())) {
@@ -86,7 +87,8 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onPostLoginEvent(PostLoginEvent e) {
-        if (DynamicPremium.playerHasPremiumEnabled(e.getPlayer().getName())) {
+        DynamicPremium plugin = DynamicPremium.getInstance();
+        if (plugin.getDatabaseManager().getDatabase().playerIsPremium(e.getPlayer().getName())) {
             Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
             DynamicPremium.getInstance().getProxy().getScheduler().runAsync(DynamicPremium.getInstance(), () -> {
                 try {
@@ -105,33 +107,11 @@ public class Listeners implements Listener {
         ProxiedPlayer p = (ProxiedPlayer) e.getSender();
         Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
         if (configuration.getStringList("AuthServers").contains(p.getServer().getInfo().getName())) {
-            if (!configuration.getStringList("AllowedCommands").contains(e.getMessage().split(" ")[0])) {
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', configuration.getString("DeniedCommand")));
+            String[] messages = e.getMessage().split(" ");
+            if (!configuration.getStringList("AllowedCommands").contains(messages[0])) {
                 e.setCancelled(true);
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', configuration.getString("DeniedCommand")));
             }
         }
     }
-
-    private String getOnlineUUID(String name) {
-        String onlineUUID = null;
-        try {
-            URLConnection connection = (new URL("https://api.mojang.com/users/profiles/minecraft/" + name)).openConnection();
-            connection.setDoOutput(true);
-            connection.connect();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String inputLine;
-            while ((inputLine = bufferedReader.readLine()) != null)
-                response.append(inputLine).append("\n");
-            bufferedReader.close();
-            onlineUUID = response.toString();
-            JSONObject jsonObject = new JSONObject(onlineUUID);
-            String uuid = jsonObject.getString("id");
-            System.out.println(name + "'s uuid is " + uuid);
-            return uuid;
-        } catch (Exception exception) {
-        }
-        return onlineUUID;
-    }
-
 }

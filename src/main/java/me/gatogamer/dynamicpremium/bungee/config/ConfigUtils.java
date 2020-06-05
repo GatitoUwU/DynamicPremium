@@ -10,15 +10,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class ConfigUtils {
-    public void saveConfig(Plugin plugin, String configname) throws IOException {
-        File pluginDir = plugin.getDataFolder();
-        File configFile = new File(pluginDir, String.valueOf(configname) + ".yml");
-        Configuration config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
-    }
 
     public void saveConfig(Configuration configuration, String configName) {
         File pluginDir = DynamicPremium.getInstance().getDataFolder();
-        File configFile = new File(pluginDir, String.valueOf(configName) + ".yml");
+        File configFile = new File(pluginDir, configName + ".yml");
         try {
             ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
         } catch (IOException e) {
@@ -28,7 +23,7 @@ public class ConfigUtils {
 
     public static Configuration getConfig(Plugin plugin, String configname) {
         File pluginDir = plugin.getDataFolder();
-        File configFile = new File(pluginDir, String.valueOf(configname) + ".yml");
+        File configFile = new File(pluginDir, configname + ".yml");
         Configuration configuration = null;
         try {
             configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);

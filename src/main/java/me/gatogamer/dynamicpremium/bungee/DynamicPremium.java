@@ -10,7 +10,6 @@ import me.gatogamer.dynamicpremium.bungee.listeners.Listeners;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.Configuration;
 
 @Getter
 @Setter
@@ -26,7 +25,7 @@ public final class DynamicPremium extends Plugin {
 
         ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Loading &cDynamicPremium &7by &cgatogamer#1111"));
 
-        ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Loading configurations by &ciSnakeBuzz_"));
+        ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Loading configurations using an API by &ciSnakeBuzz_"));
         setConfigUtils(new ConfigUtils());
         ConfigCreator.get().setupBungee(this, "Settings");
         ConfigCreator.get().setupBungee(this, "PremiumUsers");
@@ -50,10 +49,6 @@ public final class DynamicPremium extends Plugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-    }
-
-    public static boolean playerHasPremiumEnabled (String name) {
-        return getInstance().getDatabaseManager().getDatabase().playerIsPremium(name);
     }
 
     public void setConfigUtils(ConfigUtils configUtils) {

@@ -6,7 +6,7 @@
 
     <groupId>me.gatogamer</groupId>
     <artifactId>DynamicPremium</artifactId>
-    <version>1.0.4-RELEASE</version>
+    <version>1.0.5-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>DynamicPremium</name>

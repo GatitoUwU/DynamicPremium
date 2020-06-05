@@ -6,7 +6,6 @@ import me.gatogamer.dynamicpremium.shared.cache.Cache;
 import me.gatogamer.dynamicpremium.shared.cache.CacheManager;
 import me.gatogamer.dynamicpremium.spigot.compat.CompatibilityManager;
 import me.gatogamer.dynamicpremium.spigot.database.DatabaseManager;
-import me.gatogamer.dynamicpremium.spigot.listener.LoginListener;
 import me.gatogamer.dynamicpremium.spigot.messages.MessageAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -33,10 +32,6 @@ public class DynamicPremium extends JavaPlugin {
         getMessageAPI().sendMessage(false, true, "&7Loading compatibilities.");
         setCompatibilityManager(new CompatibilityManager());
         getMessageAPI().sendMessage(false, true, "&7Compatibilities loaded.");
-
-        getMessageAPI().sendMessage(false, true, "&7Loading listeners.");
-        loadListener(new LoginListener());
-        getMessageAPI().sendMessage(false, true, "&7Listeners loaded.");
 
         getMessageAPI().sendMessage(false, true, "&7Loading Database.");
         setDatabaseManager(new DatabaseManager());
