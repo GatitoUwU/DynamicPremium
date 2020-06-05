@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a9d645b4-9bb5-4ee2-b50e-799032614cbd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/DynamicPremium.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/DynamicPremium.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/commands/PremiumCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/commands/PremiumCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/config/ConfigCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/config/ConfigCreator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/config/ConfigUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/config/ConfigUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/database/type/Flatfile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/database/type/Flatfile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/listeners/Listeners.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/listeners/Listeners.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/shared/cache/Cache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/shared/cache/Cache.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/spigot/DynamicPremium.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/spigot/DynamicPremium.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/spigot/listener/LoginListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/bungee.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/bungee.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
-    </list>
+    <list default="true" id="a9d645b4-9bb5-4ee2-b50e-799032614cbd" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
