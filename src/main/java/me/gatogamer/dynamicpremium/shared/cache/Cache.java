@@ -7,11 +7,15 @@ import lombok.Setter;
 @Setter
 public class Cache {
 
+    // BungeeCord starts \\
     public long lastUsage;
+    public Object event;
+    // BungeeCord ends \\
 
     //Spigot starts \\
     private boolean authenticated;
     //Spigot ends \\
+
 
 
     public Cache() {

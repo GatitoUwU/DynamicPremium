@@ -1,5 +1,5 @@
 name: DynamicPremium
-version: 1.0.6-RELEASE
+version: 1.0.7-RELEASE
 main: me.gatogamer.dynamicpremium.bungee.DynamicPremium
 description: A simple dynamic premium auth plugin.
 author: "gatogamer_ (Dilan)"

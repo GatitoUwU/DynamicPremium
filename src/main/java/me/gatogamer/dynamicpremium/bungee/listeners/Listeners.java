@@ -8,16 +8,15 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.ChatEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.event.PreLoginEvent;
-import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.connection.InitialHandler;
 import net.md_5.bungee.event.EventHandler;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.UUID;
@@ -26,31 +25,56 @@ import static java.lang.Thread.sleep;
 
 public class Listeners implements Listener {
 
+    @EventHandler(priority = -64)
+    public void onLogin(LoginEvent e) {
+        if (e.getConnection() == null || e.isCancelled() || !e.getConnection().isConnected()) {
+            return;
+        }
+        Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
+        if (configuration.getString("UUIDMode").equalsIgnoreCase("NO_PREMIUM")) {
+            PendingConnection pendingConnection = e.getConnection();
+            UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
+            setUuid(pendingConnection, offlineuuid);
+        }
+    }
+
     @EventHandler(priority = -128)
     public void onPreLoginEvent(PreLoginEvent e) {
         Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
-        if (e.isCancelled()) {
+        if (e.getConnection() == null || e.isCancelled() || !e.getConnection().isConnected()) {
             return;
         }
-        PendingConnection pendingConnection = e.getConnection();
         DynamicPremium plugin = DynamicPremium.getInstance();
         e.registerIntent(plugin);
-        UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
+        PendingConnection pendingConnection = e.getConnection();
 
         if (plugin.getDatabaseManager().getDatabase().playerIsPremium(pendingConnection.getName())) {
             e.completeIntent(plugin);
             //.connect(ProxyServer.getInstance().getServerInfo(DynamicPremium.getInstance().getConfigUtils().getConfig(DynamicPremium.getInstance(), "Settings").getString("LobbyServer")));
             pendingConnection.setOnlineMode(true);
             if (configuration.getString("UUIDMode").equalsIgnoreCase("NO_PREMIUM")) {
-                pendingConnection.setUniqueId(offlineuuid);
+                UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
+                setUuid(pendingConnection, offlineuuid);
             }
         } else {
             e.setCancelled(false);
             e.completeIntent(plugin);
             pendingConnection.setOnlineMode(false);
-            pendingConnection.setUniqueId(offlineuuid);
+            UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
+            setUuid(pendingConnection, offlineuuid);
         }
     }
+
+    public void setUuid(PendingConnection pendingConnection, UUID uuid) {
+        try {
+            Field field = InitialHandler.class.getDeclaredField("uniqueId");
+            field.setAccessible(true);
+            field.set(pendingConnection, uuid);
+        } catch (NoSuchFieldException | IllegalAccessException noSuchFieldException) {
+            noSuchFieldException.printStackTrace();
+        }
+    }
+
 
     @EventHandler
     public void onServerChangeEvent(ServerConnectEvent e) {
@@ -63,24 +87,6 @@ public class Listeners implements Listener {
                 if (settings.getStringList("AuthServers").contains(e.getTarget().getName())) {
                     e.setTarget(newTarget);
                 }
-            }
-            if (settings.getStringList("AuthServers").contains(e.getTarget().getName())) {
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                DataOutputStream out = new DataOutputStream(stream);
-                try {
-                    out.writeUTF(e.getPlayer().getName());
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                ProxyServer.getInstance().getScheduler().runAsync(DynamicPremium.getInstance(), () -> {
-                    try {
-                        sleep(1000L);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    System.out.println("Sending logging to " + proxiedPlayer.getName() + ", he's in the server " + e.getTarget());
-                    e.getTarget().sendData("DynamicPremium-Auth", stream.toByteArray());
-                });
             }
         }
     }

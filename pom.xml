@@ -6,7 +6,7 @@
 
     <groupId>me.gatogamer</groupId>
     <artifactId>DynamicPremium</artifactId>
-    <version>1.0.6-RELEASE</version>
+    <version>1.0.7-RELEASE</version>
     <packaging>jar</packaging>
 
     <name>DynamicPremium</name>
@@ -99,6 +99,13 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20180130</version>
+        </dependency>
+        <dependency>
+            <groupId>com.arkflame</groupId>
+            <artifactId>flamecord</artifactId>
+            <version>idk</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/API/FlameCord.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
