@@ -26,6 +26,8 @@ Alert:
 # If you set this to FIRST_DEFAULT, you're forcing to ALL USERS to connect to the auth server first.
 LoginType: DIRECT #Modes available: DIRECT, FIRST_DEFAULT
 
+#Database type.
+#Database types available: FLATFILE, MYSQL
 DatabaseType: FLATFILE
 
 MySQL:
