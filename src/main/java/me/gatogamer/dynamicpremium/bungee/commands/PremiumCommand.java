@@ -31,6 +31,7 @@ public class PremiumCommand extends Command {
                 Database database = DynamicPremium.getInstance().getDatabaseManager().getDatabase();
                 if (database.playerIsPremium(player.getName())) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.Disabled")));
+                    DynamicPremium.getInstance().getListeners().checking.remove(player.getName());
                     database.removePlayer(player.getName());
                 } else {
                     Cache cache = CacheManager.getCacheOrGetNew(player.getName());
@@ -43,6 +44,7 @@ public class PremiumCommand extends Command {
                     if (mojangId != null) {
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.Enabled")));
                         database.addPlayer(player.getName());
+                        DynamicPremium.getInstance().getListeners().checking.put(player.getName(), true);
                     } else {
                         player.sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.NoPremium")));
                     }

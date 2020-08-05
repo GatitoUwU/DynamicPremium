@@ -206,7 +206,6 @@ public class MySQL implements Database {
             ResultSet rs = query("SELECT * FROM PremiumUsers WHERE PlayerName='" + name + "'");
             return (rs.next() && rs.getString("PlayerName") != null);
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
     }

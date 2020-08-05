@@ -10,6 +10,7 @@ public class Cache {
     // BungeeCord starts \\
     public long lastUsage;
     public Object event;
+    public boolean premiumLauncher;
     // BungeeCord ends \\
 
     //Spigot starts \\

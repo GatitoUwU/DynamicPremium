@@ -18,6 +18,7 @@ public final class DynamicPremium extends Plugin {
     private ConfigUtils configUtils;
     private static DynamicPremium instance;
     private DatabaseManager databaseManager;
+    private Listeners listeners;
 
     @Override
     public void onEnable() {
@@ -36,7 +37,8 @@ public final class DynamicPremium extends Plugin {
 
 
         ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Loading Listeners"));
-        getProxy().getPluginManager().registerListener(this, new Listeners());
+        listeners = new Listeners();
+        getProxy().getPluginManager().registerListener(this, listeners);
         ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Listeners loaded"));
 
         ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Loading database."));

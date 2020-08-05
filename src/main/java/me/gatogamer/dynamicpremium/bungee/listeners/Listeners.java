@@ -3,6 +3,8 @@ package me.gatogamer.dynamicpremium.bungee.listeners;
 import com.google.common.base.Charsets;
 import me.gatogamer.dynamicpremium.bungee.DynamicPremium;
 import me.gatogamer.dynamicpremium.bungee.config.ConfigUtils;
+import me.gatogamer.dynamicpremium.shared.cache.CacheManager;
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -17,17 +19,32 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.math.BigInteger;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import static java.lang.Thread.sleep;
 
 public class Listeners implements Listener {
 
+    public HashMap<String, Boolean> checking = new HashMap<>();
+    public List<String> working = new ArrayList<>();
+
     @EventHandler(priority = -64)
     public void onLogin(LoginEvent e) {
-        if (e.getConnection() == null || e.isCancelled() || !e.getConnection().isConnected()) {
+        if (e.getConnection() == null || !e.getConnection().isConnected()) {
+            return;
+        }
+        if (e.isCancelled()) {
+            System.out.println("Cancel reason of player "+e.getConnection().getName()+" is "+ e.getCancelReason());
             return;
         }
         Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
@@ -38,7 +55,7 @@ public class Listeners implements Listener {
         }
     }
 
-    @EventHandler(priority = -128)
+    @EventHandler(priority = -64)
     public void onPreLoginEvent(PreLoginEvent e) {
         Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
         if (e.getConnection() == null || e.isCancelled() || !e.getConnection().isConnected()) {
@@ -47,21 +64,28 @@ public class Listeners implements Listener {
         DynamicPremium plugin = DynamicPremium.getInstance();
         e.registerIntent(plugin);
         PendingConnection pendingConnection = e.getConnection();
+        UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
 
-        if (plugin.getDatabaseManager().getDatabase().playerIsPremium(pendingConnection.getName())) {
+        try {
+            plugin.getProxy().getScheduler().runAsync(plugin, () -> {
+                if (plugin.getDatabaseManager().getDatabase().playerIsPremium(pendingConnection.getName())) {
+                    //.connect(ProxyServer.getInstance().getServerInfo(DynamicPremium.getInstance().getConfigUtils().getConfig(DynamicPremium.getInstance(), "Settings").getString("LobbyServer")));
+                    pendingConnection.setOnlineMode(true);
+                    if (configuration.getString("UUIDMode").equalsIgnoreCase("NO_PREMIUM")) {
+                        setUuid(pendingConnection, offlineuuid);
+                    }
+                } else {
+                    e.setCancelled(false);
+                    pendingConnection.setOnlineMode(false);
+                    setUuid(pendingConnection, offlineuuid);
+                }
+                e.completeIntent(plugin);
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
             e.completeIntent(plugin);
-            //.connect(ProxyServer.getInstance().getServerInfo(DynamicPremium.getInstance().getConfigUtils().getConfig(DynamicPremium.getInstance(), "Settings").getString("LobbyServer")));
-            pendingConnection.setOnlineMode(true);
-            if (configuration.getString("UUIDMode").equalsIgnoreCase("NO_PREMIUM")) {
-                UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
-                setUuid(pendingConnection, offlineuuid);
-            }
-        } else {
-            e.setCancelled(false);
-            e.completeIntent(plugin);
-            pendingConnection.setOnlineMode(false);
-            UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
-            setUuid(pendingConnection, offlineuuid);
+            e.setCancelled(true);
+            e.setCancelReason("Error");
         }
     }
 
@@ -120,4 +144,5 @@ public class Listeners implements Listener {
             }
         }
     }
+
 }
