@@ -2,6 +2,7 @@ package me.gatogamer.dynamicpremium.bungee;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.gatogamer.dynamicpremium.bungee.commands.AdminCommand;
 import me.gatogamer.dynamicpremium.bungee.commands.PremiumCommand;
 import me.gatogamer.dynamicpremium.bungee.config.ConfigCreator;
 import me.gatogamer.dynamicpremium.bungee.config.ConfigUtils;
@@ -33,6 +34,7 @@ public final class DynamicPremium extends Plugin {
 
         ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Loading commands"));
         getProxy().getPluginManager().registerCommand(this, new PremiumCommand("premium"));
+        getProxy().getPluginManager().registerCommand(this, new AdminCommand("premiumadmin"));
         ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Commands loaded"));
 
 

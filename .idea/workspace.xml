@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,19 +23,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9d645b4-9bb5-4ee2-b50e-799032614cbd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__fr_xephi_authme_5_6_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__fr_xephi_authme_5_6_0_SNAPSHOT.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/commands/AdminCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/DynamicPremium.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/DynamicPremium.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/commands/PremiumCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/commands/PremiumCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/database/type/MySQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/database/type/MySQL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/listeners/Listeners.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/bungee/listeners/Listeners.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/shared/cache/Cache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/shared/cache/Cache.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/spigot/database/type/MySQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/gatogamer/dynamicpremium/spigot/database/type/MySQL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/bungee.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/bungee.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +44,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA 2020.2\plugins\maven\lib\maven3" />
+      </MavenGeneralSettings>
+    </option>
     <option name="importingSettings">
       <MavenImportingSettings>
         <option name="downloadDocsAutomatically" value="true" />
@@ -76,9 +74,20 @@
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="DynamicPremium build" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -106,6 +115,7 @@
       <method v="2" />
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -116,12 +126,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1579612690924</updated>
-      <workItem from="1596668548265" duration="365000" />
+      <workItem from="1596668548265" duration="1008000" />
+      <workItem from="1596673832830" duration="32000" />
+      <workItem from="1597030763868" duration="1437000" />
+      <workItem from="1597518491960" duration="236000" />
+      <workItem from="1597518751832" duration="1788000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -141,24 +155,29 @@
     </ignored-roots>
   </component>
   <component name="WindowStateProjectService">
-    <state x="525" y="133" key="#com.intellij.ide.util.MemberChooser" timestamp="1591296311757">
+    <state x="525" y="133" key="#com.intellij.ide.util.MemberChooser" timestamp="1597030859965">
       <screen x="0" y="0" width="1440" height="860" />
     </state>
     <state x="525" y="133" key="#com.intellij.ide.util.MemberChooser/0.0.1440.860/-1920.-176.1920.1040@0.0.1440.860" timestamp="1591242710390" />
-    <state x="525" y="133" key="#com.intellij.ide.util.MemberChooser/0.0.1440.860@0.0.1440.860" timestamp="1591296311757" />
+    <state x="525" y="133" key="#com.intellij.ide.util.MemberChooser/0.0.1440.860@0.0.1440.860" timestamp="1597030859965" />
     <state x="291" y="346" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1591283767940">
       <screen x="0" y="0" width="1440" height="860" />
     </state>
     <state x="291" y="346" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1440.860/-1920.-176.1920.1040@0.0.1440.860" timestamp="1591240684228" />
     <state x="291" y="346" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1440.860@0.0.1440.860" timestamp="1591283767940" />
+    <state x="574" y="187" key="FileChooserDialogImpl" timestamp="1597518727989">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="574" y="187" key="FileChooserDialogImpl/1920.182.1440.860/0.0.1920.1040@0.0.1920.1040" timestamp="1597518727989" />
     <state x="456" y="56" key="RollbackChangesDialog" timestamp="1590984451029">
       <screen x="0" y="0" width="1440" height="860" />
     </state>
     <state x="456" y="56" key="RollbackChangesDialog/0.0.1440.860@0.0.1440.860" timestamp="1590984451029" />
-    <state x="221" y="75" key="SettingsEditor" timestamp="1593268622216">
-      <screen x="0" y="0" width="1440" height="860" />
+    <state x="295" y="91" key="SettingsEditor" timestamp="1597518731547">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="221" y="75" key="SettingsEditor/0.0.1440.860@0.0.1440.860" timestamp="1593268622216" />
+    <state x="295" y="91" key="SettingsEditor/1920.182.1440.860/0.0.1920.1040@0.0.1920.1040" timestamp="1597518731547" />
     <state x="367" y="45" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1591284648153">
       <screen x="0" y="0" width="1440" height="860" />
     </state>

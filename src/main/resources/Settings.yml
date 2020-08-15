@@ -21,6 +21,18 @@ Alert:
   Disabled: "&a¡Has desactivado el modo premium!"
   Cooldown: "&a¡Debes esperar para poder hacer esto!"
 
+Admin:
+  Usage:
+    - "&7DynamicPremium &cv${project.version} &7por gatogamer#1111"
+    - ""
+    - "&cAdmin commands:"
+    - "&c/premiumadmin toggle <jugador> &4- &7Activas/desactivas el modo premium de otro jugador."
+    - ""
+  No Permission: "&c¡No tienes permiso!"
+  Toggled:
+    Enabled: "&a¡Has activado el modo premium a %player%!"
+    Disabled: "&c¡Has desactivado el modo premium a %player%!"
+
 # This isn't important, but...
 # If you set this to DIRECT, you're forcing TO PREMIUM USERS to connect to the lobby direct. (If the lobby is down, the player will be not connected)
 # If you set this to FIRST_DEFAULT, you're forcing to ALL USERS to connect to the auth server first.
@@ -33,6 +45,6 @@ DatabaseType: FLATFILE
 MySQL:
   Host: "127.0.0.1"
   Port: "3306"
-  Username: "TuPutaMadre"
-  Password: "Alguna"
-  Database: "Yo que sé flaco"
+  Username: "raíz"
+  Password: "contraseña123"
+  Database: "La base de datos ha sido actualizada xd."
