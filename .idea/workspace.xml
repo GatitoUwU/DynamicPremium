@@ -77,17 +77,6 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="DynamicPremium build" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -130,7 +119,8 @@
       <workItem from="1596673832830" duration="32000" />
       <workItem from="1597030763868" duration="1437000" />
       <workItem from="1597518491960" duration="236000" />
-      <workItem from="1597518751832" duration="1788000" />
+      <workItem from="1597518751832" duration="2444000" />
+      <workItem from="1597529782880" duration="1183000" />
     </task>
     <servers />
   </component>

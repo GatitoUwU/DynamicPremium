@@ -44,7 +44,7 @@ public class Listeners implements Listener {
             return;
         }
         if (e.isCancelled()) {
-            System.out.println("Cancel reason of player "+e.getConnection().getName()+" is "+ e.getCancelReason());
+            System.out.println("Cancel reason of player " + e.getConnection().getName() + " is " + e.getCancelReason());
             return;
         }
         Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
@@ -106,29 +106,30 @@ public class Listeners implements Listener {
         ProxiedPlayer proxiedPlayer = e.getPlayer();
         DynamicPremium plugin = DynamicPremium.getInstance();
         if (plugin.getDatabaseManager().getDatabase().playerIsPremium(proxiedPlayer.getName())) {
-            if (settings.getString("LoginType").equals("DIRECT")) {
-                ServerInfo newTarget = ProxyServer.getInstance().getServerInfo(settings.getString("LobbyServer"));
-                if (settings.getStringList("AuthServers").contains(e.getTarget().getName())) {
-                    e.setTarget(newTarget);
-                }
+            ServerInfo newTarget = ProxyServer.getInstance().getServerInfo(settings.getString("LobbyServer"));
+            if (settings.getStringList("AuthServers").contains(e.getTarget().getName())) {
+                e.setTarget(newTarget);
             }
         }
     }
+
 
     @EventHandler
     public void onPostLoginEvent(PostLoginEvent e) {
         DynamicPremium plugin = DynamicPremium.getInstance();
         if (plugin.getDatabaseManager().getDatabase().playerIsPremium(e.getPlayer().getName())) {
             Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
-            DynamicPremium.getInstance().getProxy().getScheduler().runAsync(DynamicPremium.getInstance(), () -> {
-                try {
-                    sleep(10L);
-                    e.getPlayer().connect(ProxyServer.getInstance().getServerInfo(ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings").getString("LobbyServer")));
-                    e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', configuration.getString("SendLobbyMessage")));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
+            if (!configuration.getString("LoginType").equals("DIRECT")) { // Fixes xd
+                DynamicPremium.getInstance().getProxy().getScheduler().runAsync(DynamicPremium.getInstance(), () -> {
+                    try {
+                        sleep(10L);
+                        e.getPlayer().connect(ProxyServer.getInstance().getServerInfo(ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings").getString("LobbyServer")));
+                        e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', configuration.getString("SendLobbyMessage")));
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+            }
         }
     }
 
