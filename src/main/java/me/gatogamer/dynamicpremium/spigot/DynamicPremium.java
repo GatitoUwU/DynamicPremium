@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import me.gatogamer.dynamicpremium.shared.cache.Cache;
 import me.gatogamer.dynamicpremium.shared.cache.CacheManager;
+import me.gatogamer.dynamicpremium.shared.database.type.MySQL;
 import me.gatogamer.dynamicpremium.spigot.compat.CompatibilityManager;
-import me.gatogamer.dynamicpremium.spigot.database.DatabaseManager;
+import me.gatogamer.dynamicpremium.shared.database.DatabaseManager;
 import me.gatogamer.dynamicpremium.spigot.messages.MessageAPI;
+import me.gatogamer.dynamicpremium.spigot.tasks.SessionCheckerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,25 +36,22 @@ public class DynamicPremium extends JavaPlugin {
         getMessageAPI().sendMessage(false, true, "&7Compatibilities loaded.");
 
         getMessageAPI().sendMessage(false, true, "&7Loading Database.");
-        setDatabaseManager(new DatabaseManager());
+        setDatabaseManager(new DatabaseManager("MYSQL"));
+        if (databaseManager.getDatabase() instanceof MySQL) {
+            MySQL mySQL = (MySQL) databaseManager.getDatabase();
+
+            mySQL.setHost(getConfig().getString("MySQL.Host"));
+            mySQL.setPort(getConfig().getString("MySQL.Port"));
+            mySQL.setUsername(getConfig().getString("MySQL.Username"));
+            mySQL.setPassword(getConfig().getString("MySQL.Password"));
+            mySQL.setDatabase(getConfig().getString("MySQL.Database"));
+        }
+        databaseManager.getDatabase().loadDatabase(databaseManager);
         getMessageAPI().sendMessage(false, true, "&7Database loaded.");
 
 
         getMessageAPI().sendMessage(false, true, "&7Loading tasks.");
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Bukkit.getOnlinePlayers().forEach(player -> {
-                    Cache cache = CacheManager.getCacheOrGetNew(player.getName());
-                    if (!cache.isAuthenticated()) {
-                        if (getDatabaseManager().getDatabase().isPlayerPremium(player.getName())) {
-                            getCompatibilityManager().authPlayer(player);
-                            cache.setAuthenticated(true);
-                        }
-                    }
-                });
-            }
-        }.runTaskTimerAsynchronously(this, 0L, 20L);
+        new SessionCheckerTask().runTaskTimerAsynchronously(this, 0L, 20L);
         getMessageAPI().sendMessage(false, true, "&7Tasks loaded.");
 
 

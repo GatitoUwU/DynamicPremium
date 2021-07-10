@@ -1,4 +1,4 @@
-package me.gatogamer.dynamicpremium.bungee.database;
+package me.gatogamer.dynamicpremium.shared.database;
 
 public interface Database {
     void loadDatabase(DatabaseManager databaseManager);

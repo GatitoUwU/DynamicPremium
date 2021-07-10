@@ -26,32 +26,25 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.Thread.sleep;
 
 public class Listeners implements Listener {
 
-    public HashMap<String, Boolean> checking = new HashMap<>();
-    public List<String> working = new ArrayList<>();
+    private final Set<String> premiumList = ConcurrentHashMap.newKeySet();
 
     @EventHandler(priority = -64)
     public void onLogin(LoginEvent e) {
         if (e.getConnection() == null || !e.getConnection().isConnected()) {
             return;
         }
-        if (e.isCancelled()) {
-            System.out.println("Cancel reason of player " + e.getConnection().getName() + " is " + e.getCancelReason());
-            return;
-        }
         Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
         if (configuration.getString("UUIDMode").equalsIgnoreCase("NO_PREMIUM")) {
             PendingConnection pendingConnection = e.getConnection();
-            UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
-            setUuid(pendingConnection, offlineuuid);
+            UUID offlineUuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
+            setUuid(pendingConnection, offlineUuid);
         }
     }
 
@@ -64,7 +57,7 @@ public class Listeners implements Listener {
         DynamicPremium plugin = DynamicPremium.getInstance();
         e.registerIntent(plugin);
         PendingConnection pendingConnection = e.getConnection();
-        UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
+        UUID offlineUuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
 
         try {
             plugin.getProxy().getScheduler().runAsync(plugin, () -> {
@@ -72,12 +65,14 @@ public class Listeners implements Listener {
                     //.connect(ProxyServer.getInstance().getServerInfo(DynamicPremium.getInstance().getConfigUtils().getConfig(DynamicPremium.getInstance(), "Settings").getString("LobbyServer")));
                     pendingConnection.setOnlineMode(true);
                     if (configuration.getString("UUIDMode").equalsIgnoreCase("NO_PREMIUM")) {
-                        setUuid(pendingConnection, offlineuuid);
+                        setUuid(pendingConnection, offlineUuid);
                     }
+                    premiumList.add(pendingConnection.getName());
                 } else {
                     e.setCancelled(false);
                     pendingConnection.setOnlineMode(false);
-                    setUuid(pendingConnection, offlineuuid);
+                    setUuid(pendingConnection, offlineUuid);
+                    premiumList.remove(pendingConnection.getName());
                 }
                 e.completeIntent(plugin);
             });
@@ -99,13 +94,11 @@ public class Listeners implements Listener {
         }
     }
 
-
     @EventHandler
     public void onServerChangeEvent(ServerConnectEvent e) {
         Configuration settings = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
         ProxiedPlayer proxiedPlayer = e.getPlayer();
-        DynamicPremium plugin = DynamicPremium.getInstance();
-        if (plugin.getDatabaseManager().getDatabase().playerIsPremium(proxiedPlayer.getName())) {
+        if (premiumList.contains(proxiedPlayer.getName())) {
             ServerInfo newTarget = ProxyServer.getInstance().getServerInfo(settings.getString("LobbyServer"));
             if (settings.getStringList("AuthServers").contains(e.getTarget().getName())) {
                 e.setTarget(newTarget);
@@ -113,11 +106,9 @@ public class Listeners implements Listener {
         }
     }
 
-
     @EventHandler
     public void onPostLoginEvent(PostLoginEvent e) {
-        DynamicPremium plugin = DynamicPremium.getInstance();
-        if (plugin.getDatabaseManager().getDatabase().playerIsPremium(e.getPlayer().getName())) {
+        if (premiumList.contains(e.getPlayer().getName())) {
             Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
             if (!configuration.getString("LoginType").equals("DIRECT")) { // Fixes xd
                 DynamicPremium.getInstance().getProxy().getScheduler().runAsync(DynamicPremium.getInstance(), () -> {
@@ -145,5 +136,4 @@ public class Listeners implements Listener {
             }
         }
     }
-
 }

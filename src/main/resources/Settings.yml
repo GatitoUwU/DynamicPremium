@@ -45,6 +45,17 @@ DatabaseType: FLATFILE
 MySQL:
   Host: "127.0.0.1"
   Port: "3306"
-  Username: "raíz"
-  Password: "contraseña123"
-  Database: "La base de datos ha sido actualizada xd."
+  Username: "root"
+  Password: "password"
+  Database: "DynamicPremium"
+
+Import:
+  File:
+    enabled: false
+  FastLogin:
+    enabled: false
+    Host: "127.0.0.1"
+    Port: "3306"
+    Username: "root"
+    Password: "password"
+    Database: "DynamicPremium"

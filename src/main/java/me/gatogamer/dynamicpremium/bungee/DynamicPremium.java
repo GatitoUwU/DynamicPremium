@@ -6,11 +6,15 @@ import me.gatogamer.dynamicpremium.bungee.commands.AdminCommand;
 import me.gatogamer.dynamicpremium.bungee.commands.PremiumCommand;
 import me.gatogamer.dynamicpremium.bungee.config.ConfigCreator;
 import me.gatogamer.dynamicpremium.bungee.config.ConfigUtils;
-import me.gatogamer.dynamicpremium.bungee.database.DatabaseManager;
+import me.gatogamer.dynamicpremium.bungee.imports.FastLoginImport;
+import me.gatogamer.dynamicpremium.bungee.imports.FileConfigurationImport;
 import me.gatogamer.dynamicpremium.bungee.listeners.Listeners;
+import me.gatogamer.dynamicpremium.shared.database.DatabaseManager;
+import me.gatogamer.dynamicpremium.shared.database.type.MySQL;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.config.Configuration;
 
 @Getter
 @Setter
@@ -43,9 +47,25 @@ public final class DynamicPremium extends Plugin {
         getProxy().getPluginManager().registerListener(this, listeners);
         ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Listeners loaded"));
 
+        Configuration mainSettings = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
+
         ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Loading database."));
-        setDatabaseManager(new DatabaseManager());
+        setDatabaseManager(new DatabaseManager(mainSettings.getString("DatabaseType")));
+        if (databaseManager.getDatabase() instanceof MySQL) {
+            MySQL mySQL = (MySQL) databaseManager.getDatabase();
+
+            mySQL.setHost(mainSettings.getString("MySQL.Host"));
+            mySQL.setPort(mainSettings.getString("MySQL.Port"));
+            mySQL.setUsername(mainSettings.getString("MySQL.Username"));
+            mySQL.setPassword(mainSettings.getString("MySQL.Password"));
+            mySQL.setDatabase(mainSettings.getString("MySQL.Database"));
+        }
+        databaseManager.getDatabase().loadDatabase(databaseManager);
+
         ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7Database loaded."));
+
+        new FastLoginImport();
+        new FileConfigurationImport();
 
         ProxyServer.getInstance().getConsole().sendMessage(c("&cDynamicPremium &8> &7DynamicPremium has been loaded"));
     }

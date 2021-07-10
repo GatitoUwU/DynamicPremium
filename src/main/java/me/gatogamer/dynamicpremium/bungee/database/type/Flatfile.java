@@ -2,8 +2,8 @@ package me.gatogamer.dynamicpremium.bungee.database.type;
 
 import me.gatogamer.dynamicpremium.bungee.DynamicPremium;
 import me.gatogamer.dynamicpremium.bungee.config.ConfigUtils;
-import me.gatogamer.dynamicpremium.bungee.database.Database;
-import me.gatogamer.dynamicpremium.bungee.database.DatabaseManager;
+import me.gatogamer.dynamicpremium.shared.database.Database;
+import me.gatogamer.dynamicpremium.shared.database.DatabaseManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.config.Configuration;
@@ -43,5 +43,4 @@ public class Flatfile implements Database {
 
     public String c(String c) {
         return ChatColor.translateAlternateColorCodes('&', c);
-    }
-}
+    }}
