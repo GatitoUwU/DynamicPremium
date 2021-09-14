@@ -7,6 +7,8 @@ import me.gatogamer.dynamicpremium.shared.database.DatabaseManager;
 import net.md_5.bungee.api.ChatColor;
 
 import java.sql.*;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 @Getter
@@ -18,6 +20,7 @@ public class MySQL implements Database {
     private String database;
     private String username;
     private String password;
+    private Map<String, String> configMySQLProperties;
     private Connection connection;
 
     @Override
@@ -31,6 +34,7 @@ public class MySQL implements Database {
             properties.setProperty("verifyServerCertificate", "false");
             properties.setProperty("useSSL", "false");
             properties.setProperty("requireSSL", "false");
+            configMySQLProperties.forEach(properties::setProperty);
             connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, properties);
             update("CREATE TABLE IF NOT EXISTS PremiumUsers (PlayerName VARCHAR(100), Enabled VARCHAR(100))");
             System.out.println("DynamicPremium > Connected to MySQL!");

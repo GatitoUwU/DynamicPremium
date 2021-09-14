@@ -15,7 +15,7 @@ public class NyaUtils {
      */
     public static void run(Runnable runnable) {
         Thread thread = new Thread(runnable);
-        thread.setName("RedisBungee - NyaUtils Worker Thread");
+        thread.setName("DynamicPremium - NyaUtils Worker Thread");
         thread.start();
     }
 }

@@ -1,9 +1,11 @@
 package me.gatogamer.dynamicpremium.bungee.listeners;
 
 import com.google.common.base.Charsets;
+import lombok.Getter;
 import me.gatogamer.dynamicpremium.bungee.DynamicPremium;
 import me.gatogamer.dynamicpremium.bungee.config.ConfigUtils;
 import me.gatogamer.dynamicpremium.shared.cache.CacheManager;
+import me.gatogamer.dynamicpremium.shared.utils.NyaUtils;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
@@ -28,12 +30,18 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 import static java.lang.Thread.sleep;
 
+@Getter
 public class Listeners implements Listener {
 
     private final Set<String> premiumList = ConcurrentHashMap.newKeySet();
+    private final Set<String> pendingVerification = ConcurrentHashMap.newKeySet();
+    private final Set<String> onVerification = ConcurrentHashMap.newKeySet();
+
+    private final Pattern allowedNickCharacters = Pattern.compile("[a-zA-Z0-9_]*");
 
     @EventHandler(priority = -64)
     public void onLogin(LoginEvent e) {
@@ -54,10 +62,33 @@ public class Listeners implements Listener {
         if (e.getConnection() == null || e.isCancelled() || !e.getConnection().isConnected()) {
             return;
         }
-        DynamicPremium plugin = DynamicPremium.getInstance();
-        e.registerIntent(plugin);
         PendingConnection pendingConnection = e.getConnection();
+        DynamicPremium plugin = DynamicPremium.getInstance();
         UUID offlineUuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
+
+        if (!allowedNickCharacters.matcher(pendingConnection.getName()).matches()) {
+            e.setCancelReason("Invalid nickname detected.");
+            e.setCancelled(true);
+            return;
+        }
+
+        if (onVerification.contains(pendingConnection.getName())) {
+            pendingVerification.remove(pendingConnection.getName());
+            onVerification.remove(pendingConnection.getName());
+            premiumList.remove(pendingConnection.getName());
+        }
+
+        if (pendingVerification.contains(pendingConnection.getName())) {
+            pendingConnection.setOnlineMode(true);
+            onVerification.add(pendingConnection.getName());
+            premiumList.add(pendingConnection.getName());
+            if (configuration.getString("UUIDMode").equalsIgnoreCase("NO_PREMIUM")) {
+                setUuid(pendingConnection, offlineUuid);
+            }
+            return;
+        }
+
+        e.registerIntent(plugin);
 
         try {
             plugin.getProxy().getScheduler().runAsync(plugin, () -> {
@@ -108,14 +139,20 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onPostLoginEvent(PostLoginEvent e) {
+        Configuration mainSettings = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
+        if (onVerification.contains(e.getPlayer().getName())) {
+            onVerification.remove(e.getPlayer().getName());
+            pendingVerification.remove(e.getPlayer().getName());
+            e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("Alert.Enabled")));
+            NyaUtils.run(() -> DynamicPremium.getInstance().getDatabaseManager().getDatabase().addPlayer(e.getPlayer().getName()));
+        }
         if (premiumList.contains(e.getPlayer().getName())) {
-            Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
-            if (!configuration.getString("LoginType").equals("DIRECT")) { // Fixes xd
+            if (!mainSettings.getString("LoginType").equals("DIRECT")) { // Fixes xd
                 DynamicPremium.getInstance().getProxy().getScheduler().runAsync(DynamicPremium.getInstance(), () -> {
                     try {
                         sleep(10L);
                         e.getPlayer().connect(ProxyServer.getInstance().getServerInfo(ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings").getString("LobbyServer")));
-                        e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', configuration.getString("SendLobbyMessage")));
+                        e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("SendLobbyMessage")));
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }

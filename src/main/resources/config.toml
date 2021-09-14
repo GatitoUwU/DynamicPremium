@@ -12,6 +12,7 @@ UUIDMode = "PREMIUM" #UUID modes available: PREMIUM, NO_PREMIUM.
 # This isn't important, but...
 # If you set this to DIRECT, you're forcing TO PREMIUM USERS to connect to the lobby direct. (If the lobby is down, the player will be not connected)
 # If you set this to FIRST_DEFAULT, you're forcing to ALL USERS to connect to the auth server first.
+# IMPORTANT: Premium users are just users that have the /premium mode enabled.
 LoginType = "DIRECT" #Modes available: DIRECT, FIRST_DEFAULT
 
 [Alert]
@@ -41,7 +42,11 @@ Port = "3306"
 Username = "root"
 Password = "password"
 Database = "DynamicPremium"
-
+Properties = [
+    "autoReconnect=true",
+    "useSSL=false",
+    "verifyServerCertificate=false"
+]
 [Import.FastLogin]
 enabled = false
 Host = "127.0.0.1"

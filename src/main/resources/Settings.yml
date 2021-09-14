@@ -20,6 +20,13 @@ Alert:
   Enabled: "&a¡Has activado el modo premium!"
   Disabled: "&a¡Has desactivado el modo premium!"
   Cooldown: "&a¡Debes esperar para poder hacer esto!"
+  Checking: |-
+    &7&l&m----------------&b DynamicPremium &7&l&m----------------
+    &7Hemos visto que has activado el &a/premium
+    &7Debido a ello te hemos expulsado para verificar
+    &7que en verdad tengas una cuenta comprada de Minecraft.
+    &7Entra de nuevo y haremos la verificación.
+    &7&l&m------------------------------------------------
 
 Admin:
   Usage:
@@ -48,6 +55,8 @@ MySQL:
   Username: "root"
   Password: "password"
   Database: "DynamicPremium"
+  Properties:
+    - "autoReconnect=true"
 
 Import:
   File:

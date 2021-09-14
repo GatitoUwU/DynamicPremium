@@ -16,6 +16,8 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 @Getter
 @Setter
 public final class DynamicPremium extends Plugin {
@@ -59,6 +61,10 @@ public final class DynamicPremium extends Plugin {
             mySQL.setUsername(mainSettings.getString("MySQL.Username"));
             mySQL.setPassword(mainSettings.getString("MySQL.Password"));
             mySQL.setDatabase(mainSettings.getString("MySQL.Database"));
+            mySQL.setConfigMySQLProperties(new ConcurrentHashMap<>());
+            mainSettings.getStringList("MySQL.Properties").forEach(s ->
+                    mySQL.getConfigMySQLProperties().put(s.split("=")[0], s.split("=")[1])
+            );
         }
         databaseManager.getDatabase().loadDatabase(databaseManager);
 

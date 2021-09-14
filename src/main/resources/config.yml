@@ -12,3 +12,5 @@ MySQL:
   Username: "root"
   Password: "password"
   Database: "DynamicPremium"
+  Properties:
+    - "autoReconnect=true"

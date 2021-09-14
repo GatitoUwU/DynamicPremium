@@ -14,6 +14,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 @Getter
 @Setter
 public class DynamicPremium extends JavaPlugin {
@@ -45,6 +47,10 @@ public class DynamicPremium extends JavaPlugin {
             mySQL.setUsername(getConfig().getString("MySQL.Username"));
             mySQL.setPassword(getConfig().getString("MySQL.Password"));
             mySQL.setDatabase(getConfig().getString("MySQL.Database"));
+            mySQL.setConfigMySQLProperties(new ConcurrentHashMap<>());
+            getConfig().getStringList("MySQL.Properties").forEach(s ->
+                    mySQL.getConfigMySQLProperties().put(s.split("=")[0], s.split("=")[1])
+            );
         }
         databaseManager.getDatabase().loadDatabase(databaseManager);
         getMessageAPI().sendMessage(false, true, "&7Database loaded.");

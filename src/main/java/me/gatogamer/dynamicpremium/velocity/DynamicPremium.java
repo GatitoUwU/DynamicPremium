@@ -17,6 +17,8 @@ import sun.misc.Unsafe;
 import javax.inject.Inject;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This code has been created by
@@ -62,6 +64,11 @@ public class DynamicPremium {
             mySQL.setUsername(mainSettings.getString("MySQL.Username"));
             mySQL.setPassword(mainSettings.getString("MySQL.Password"));
             mySQL.setDatabase(mainSettings.getString("MySQL.Database"));
+
+            mySQL.setConfigMySQLProperties(new ConcurrentHashMap<>());
+            mainSettings.getList("MySQL.Properties", new ArrayList<String>()).forEach(s ->
+                    mySQL.getConfigMySQLProperties().put(s.split("=")[0], s.split("=")[1])
+            );
         }
         databaseManager.getDatabase().loadDatabase(databaseManager);
 
