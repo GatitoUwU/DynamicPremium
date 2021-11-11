@@ -1,4 +1,6 @@
-LobbyServer: "l1"
+LobbyServer:
+  default: "l1"
+  mc.example.com: "otherLobby"
 AuthServers:
   - "al1"
 AllowedCommands:

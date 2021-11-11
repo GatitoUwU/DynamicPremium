@@ -4,9 +4,7 @@ import com.google.common.base.Charsets;
 import lombok.Getter;
 import me.gatogamer.dynamicpremium.bungee.DynamicPremium;
 import me.gatogamer.dynamicpremium.bungee.config.ConfigUtils;
-import me.gatogamer.dynamicpremium.shared.cache.CacheManager;
 import me.gatogamer.dynamicpremium.shared.utils.NyaUtils;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -17,17 +15,8 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.connection.InitialHandler;
 import net.md_5.bungee.event.EventHandler;
-import org.json.JSONObject;
 
-import java.io.*;
 import java.lang.reflect.Field;
-import java.math.BigInteger;
-import java.net.Proxy;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -41,19 +30,51 @@ public class Listeners implements Listener {
     private final Set<String> pendingVerification = ConcurrentHashMap.newKeySet();
     private final Set<String> onVerification = ConcurrentHashMap.newKeySet();
 
+    private final String defaultLobby;
+    private final List<ForcedLobby> lobbies = new ArrayList<>();
+    private final Map<String, String> playerLobby = new HashMap<>();
+
     private final Pattern allowedNickCharacters = Pattern.compile("[a-zA-Z0-9_]*");
+
+    public Listeners() {
+        Configuration settings = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
+        String def = settings.getString("LobbyServer", "lobby");
+        for (String ip : settings.getSection("LobbyServer").getKeys()) {
+            String lobby = settings.getString("LobbyServer." + ip, "lobby");
+            if (lobby == null || lobby.trim().isEmpty()) {
+                lobby = "lobby";
+            }
+            if (ip.equalsIgnoreCase("default")) {
+                def = lobby;
+            } else {
+                String[] split = ip.split(":", 2);
+                lobbies.add(new ForcedLobby(split[0], split.length > 1 ? split[1] : null, lobby));
+            }
+        }
+        defaultLobby = def;
+    }
 
     @EventHandler(priority = -64)
     public void onLogin(LoginEvent e) {
         if (e.getConnection() == null || !e.getConnection().isConnected()) {
             return;
         }
+        playerLobby.put(e.getConnection().getName(), getLobby(e.getConnection().getVirtualHost().getHostString(), String.valueOf(e.getConnection().getVirtualHost().getPort())));
         Configuration configuration = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
         if (configuration.getString("UUIDMode").equalsIgnoreCase("NO_PREMIUM")) {
             PendingConnection pendingConnection = e.getConnection();
             UUID offlineUuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + pendingConnection.getName()).getBytes(Charsets.UTF_8));
             setUuid(pendingConnection, offlineUuid);
         }
+    }
+
+    private String getLobby(String ip, String port) {
+        for (ForcedLobby lobby : lobbies) {
+            if (lobby.match(ip, port)) {
+                return lobby.getHost();
+            }
+        }
+        return defaultLobby;
     }
 
     @EventHandler(priority = -64)
@@ -130,7 +151,8 @@ public class Listeners implements Listener {
         Configuration settings = ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings");
         ProxiedPlayer proxiedPlayer = e.getPlayer();
         if (premiumList.contains(proxiedPlayer.getName())) {
-            ServerInfo newTarget = ProxyServer.getInstance().getServerInfo(settings.getString("LobbyServer"));
+            //ServerInfo newTarget = ProxyServer.getInstance().getServerInfo(settings.getString("LobbyServer"));
+            ServerInfo newTarget = ProxyServer.getInstance().getServerInfo(playerLobby.getOrDefault(proxiedPlayer.getName(), defaultLobby));
             if (settings.getStringList("AuthServers").contains(e.getTarget().getName())) {
                 e.setTarget(newTarget);
             }
@@ -151,7 +173,8 @@ public class Listeners implements Listener {
                 DynamicPremium.getInstance().getProxy().getScheduler().runAsync(DynamicPremium.getInstance(), () -> {
                     try {
                         sleep(10L);
-                        e.getPlayer().connect(ProxyServer.getInstance().getServerInfo(ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings").getString("LobbyServer")));
+                        //e.getPlayer().connect(ProxyServer.getInstance().getServerInfo(ConfigUtils.getConfig(DynamicPremium.getInstance(), "Settings").getString("LobbyServer")));
+                        e.getPlayer().connect(ProxyServer.getInstance().getServerInfo(playerLobby.getOrDefault(e.getPlayer().getName(), defaultLobby)));
                         e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', mainSettings.getString("SendLobbyMessage")));
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
@@ -159,6 +182,11 @@ public class Listeners implements Listener {
                 });
             }
         }
+    }
+
+    @EventHandler
+    public void onLeave(PlayerDisconnectEvent e) {
+        playerLobby.remove(e.getPlayer().getName());
     }
 
     @EventHandler
@@ -171,6 +199,29 @@ public class Listeners implements Listener {
                 e.setCancelled(true);
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', configuration.getString("DeniedCommand")));
             }
+        }
+    }
+
+    private static final class ForcedLobby {
+        private final String ip;
+        private final String port;
+        private final String host;
+
+        public ForcedLobby(String ip, String port, String host) {
+            this.ip = ip;
+            this.port = port;
+            this.host = host;
+        }
+
+        public boolean match(String ip, String port) {
+            if (this.ip.equalsIgnoreCase(ip)) {
+                return this.port == null || this.port.equalsIgnoreCase(port);
+            }
+            return false;
+        }
+
+        public String getHost() {
+            return host;
         }
     }
 }
