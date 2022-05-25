@@ -26,5 +26,7 @@ public class DatabaseManager {
             System.out.println("DynamicPremium > Loading Flatfile database!");
             database = new FlatfileDatabase();
         }
+
+        database.loadDatabase(iConfigParser, this);
     }
 }
