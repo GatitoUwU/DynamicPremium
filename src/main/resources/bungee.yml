@@ -1,5 +1,0 @@
-name: DynamicPremium
-version: ${project.version}
-main: me.gatogamer.dynamicpremium.bungee.DynamicPremium
-description: A simple dynamic premium auth plugin.
-author: "gatogamer_ (Dilan)"
