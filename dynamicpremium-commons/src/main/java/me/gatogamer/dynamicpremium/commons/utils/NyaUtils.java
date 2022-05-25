@@ -11,9 +11,8 @@ import java.util.concurrent.CompletableFuture;
  */
 public class NyaUtils {
     /**
-     * Creates a new thread and executes a Runnable.
-     *
-     * @param runnable: The runnable that will be ran.
+     * Executes a runnable by using the ForkJoinPool.
+     * @param runnable: The runnable that will be run.
      */
     public static void run(Runnable runnable) {
         CompletableFuture.runAsync(runnable);
