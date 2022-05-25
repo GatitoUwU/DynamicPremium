@@ -1,5 +1,7 @@
 package me.gatogamer.dynamicpremium.commons.utils;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * This code has been created by
  * gatogamer#6666 A.K.A. gatogamer.
@@ -14,8 +16,6 @@ public class NyaUtils {
      * @param runnable: The runnable that will be ran.
      */
     public static void run(Runnable runnable) {
-        Thread thread = new Thread(runnable);
-        thread.setName("DynamicPremium - NyaUtils Worker Thread");
-        thread.start();
+        CompletableFuture.runAsync(runnable);
     }
 }
