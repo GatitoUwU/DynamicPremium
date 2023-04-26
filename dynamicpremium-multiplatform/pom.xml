@@ -5,26 +5,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>me.gatogamer</groupId>
+        <groupId>im.thatneko</groupId>
         <artifactId>dynamicpremium-parent</artifactId>
-        <version>1.1.6-MULT1M0DUL3</version>
+        <version>2.0-R3C0D3</version>
     </parent>
 
+    <name>DynamicPremium MultiPlatform</name>
     <artifactId>dynamicpremium-multiplatform</artifactId>
-    <version>1.1.6-MULT1M0DUL3</version>
+    <version>2.0-R3C0D3</version>
     <packaging>jar</packaging>
 
-    <name>DynamicPremium MultiPlatform</name>
-    <url>https://gatogamer.gay</url>
+    <url>https://thatneko.im</url>
     <description>The simplest /premium plugin ever.</description>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
-        <finalName>DynamicPremium-${version}</finalName>
+        <finalName>DynamicPremium-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -47,6 +47,40 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.zaxxer.hikari</pattern>
+                                    <shadedPattern>im.thatneko.dynamicpremium.libs.hikari</shadedPattern>
+                                </relocation>
+                                <!--
+                                  Removed as it causes issues with Velocity.
+                                <relocation>
+                                    <pattern>org.slf4j</pattern>
+                                    <shadedPattern>im.thatneko.dynamicpremium.libs.slf4j</shadedPattern>
+                                </relocation>-->
+                                <relocation>
+                                    <pattern>com.google.protobuf</pattern>
+                                    <shadedPattern>im.thatneko.dynamicpremium.libs.google.protobuf</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>google.protobuf</pattern>
+                                    <shadedPattern>im.thatneko.dynamicpremium.libs.google2.protobuf</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.mysql</pattern>
+                                    <shadedPattern>im.thatneko.dynamicpremium.libs.mysql</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
@@ -73,27 +107,27 @@
 
     <dependencies>
         <dependency>
-            <groupId>me.gatogamer</groupId>
+            <groupId>im.thatneko</groupId>
             <artifactId>dynamicpremium-commons</artifactId>
-            <version>1.1.6-MULT1M0DUL3</version>
+            <version>2.0-R3C0D3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>me.gatogamer</groupId>
+            <groupId>im.thatneko</groupId>
             <artifactId>dynamicpremium-bungee</artifactId>
-            <version>1.1.6-MULT1M0DUL3</version>
+            <version>2.0-R3C0D3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>me.gatogamer</groupId>
+            <groupId>im.thatneko</groupId>
             <artifactId>dynamicpremium-spigot</artifactId>
-            <version>1.1.6-MULT1M0DUL3</version>
+            <version>2.0-R3C0D3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>me.gatogamer</groupId>
+            <groupId>im.thatneko</groupId>
             <artifactId>dynamicpremium-velocity</artifactId>
-            <version>1.1.6-MULT1M0DUL3</version>
+            <version>2.0-R3C0D3</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

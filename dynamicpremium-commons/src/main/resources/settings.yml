@@ -1,0 +1,30 @@
+####################################
+# DynamicPremium by gatogamer#6666 #
+####################################
+
+lobby-server: "lobby"
+
+access-only-if-player-is-premium:
+  - "premium-server-1"
+
+auth-servers:
+  - "auth"
+allowed-commands:
+  - "/l"
+  - "/login"
+  - "/reg"
+  - "/register"
+
+allow-disable-premium: false
+direct-login-for-geyser-users: true
+
+premium-command-delay: 60000 #Millis
+# This is important.
+# PREMIUM (if you change your minecraft name, and you have premium uuid, you will have all things that you have in the other name)
+# NO_PREMIUM (if you change your minecraft name, you will lose your things, but if you're premium, and you put /premium, you will not lose your things xD)
+uuid-mode: PREMIUM #UUID modes available: PREMIUM, NO_PREMIUM.
+
+check-if-player-is-premium-first-time:
+  enabled: false
+  # Valid methods: MOJANG, CONNECTION (Connection is safer)
+  check-method: CONNECTION

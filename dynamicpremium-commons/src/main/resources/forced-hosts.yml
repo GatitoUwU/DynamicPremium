@@ -1,0 +1,25 @@
+####################################
+# DynamicPremium by gatogamer#6666 #
+####################################
+
+forced-lobbies-mode: false
+
+LobbyServers:
+  default:
+    # Balance modes available:
+    #   - LOWEST - fills servers with less users.
+    #   - RANDOM - just select any server from list.
+    #   - FILL - fills servers, when they are full, it'll be switched to the another one.
+    balance-mode: LOWEST
+    servers:
+      - "l1"
+      - "l2"
+      - "l3"
+      - "l4"
+  "mc.gatogamer.gay":
+    balance-mode: LOWEST
+    servers:
+      - "sv-l1"
+      - "sv-l2"
+      - "sv-l3"
+      - "sv-l4"

@@ -3,20 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
-        <groupId>me.gatogamer</groupId>
+        <groupId>im.thatneko</groupId>
         <artifactId>dynamicpremium-parent</artifactId>
-        <version>1.1.6-MULT1M0DUL3</version>
+        <version>2.0-R3C0D3</version>
     </parent>
 
-    <artifactId>dynamicpremium-bungee</artifactId>
-    <version>1.1.6-MULT1M0DUL3</version>
-    <packaging>jar</packaging>
-
     <name>DynamicPremium Bungee</name>
-    <url>https://gatogamer.gay</url>
+    <artifactId>dynamicpremium-bungee</artifactId>
+    <packaging>jar</packaging>
     <description>The simplest /premium plugin ever.</description>
+    <url>https://thatneko.im</url>
 
     <properties>
         <java.version>1.8</java.version>
@@ -47,6 +44,16 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
@@ -68,41 +75,28 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.16-R0.5-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
+        <dependency> <!-- You'll need to compile BungeeCord first! -->
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-proxy</artifactId>
-            <version>1.16-R0.5-SNAPSHOT</version>
+            <version>1.19-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.gatogamer</groupId>
+            <groupId>im.thatneko</groupId>
             <artifactId>dynamicpremium-commons</artifactId>
-            <version>1.1.6-MULT1M0DUL3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version>
+            <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>1.18.26</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.imaginarycode.minecraft</groupId>
-            <artifactId>RedisBungee</artifactId>
-            <version>0.5</version>
-            <scope>system</scope>
-            <systemPath>C:/Users/Administrador/IdeaProjects/RedisBungee.jar</systemPath>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-platform-bungeecord</artifactId>
+            <version>4.3.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

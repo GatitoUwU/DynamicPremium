@@ -1,6 +1,7 @@
 name: DynamicPremium
 version: '${project.version}'
-main: me.gatogamer.dynamicpremium.spigot.DynamicPremium
+main: im.thatneko.dynamicpremium.spigot.DynamicPremium
+api-version: 1.13
 authors: [ gatogamer ]
 description: The simplest /premium plugin ever.
-website: https://gatogamer.gay
+website: https://thatneko.im

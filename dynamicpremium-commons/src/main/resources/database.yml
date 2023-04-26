@@ -1,0 +1,24 @@
+#Database type.
+#Database types available: FLATFILE, MYSQL (connector driver, legacy), MYSQL-HIKARI (HikariCP driver)
+database-type: MYSQL-HIKARI
+
+mysql:
+  host: "127.0.0.1"
+  port: 3306
+  username: "root"
+  password: "password"
+  database: "DynamicPremium"
+  properties:
+    - "autoReconnect=true"
+    - "serverTimezone=UTC"
+
+import:
+  file:
+    enabled: false
+  fastlogin:
+    enabled: false
+    host: "127.0.0.1"
+    port: 3306
+    username: "root"
+    password: "password"
+    database: "DynamicPremium"

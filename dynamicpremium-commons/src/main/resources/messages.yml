@@ -1,0 +1,53 @@
+####################################
+# DynamicPremium by gatogamer#6666 #
+####################################
+
+admin:
+  no-permission: "&cYou don't have permission to do this."
+  usage: |-
+    &cDynamicPremium &7by &cgatogamer&6666
+    &7
+    &cAdmin commands:
+    &c/premiumadmin toggle <player> &8- &7Enable/disable premium mode for a player.
+  toggled:
+    enabled: "&aYou've enabled the premium-mode for %player%."
+    disabled: "&cYou've disabled the premium-mode for %player%."
+
+spoof:
+  specify-uuid: "&cYou need to specify an UUID to use this."
+  toggled:
+    enabled: "&aNow %player% will use the UUID %uuid%"
+    disabled: "&cDisabled the spoofed-uuid for %player%."
+
+kick:
+  access-only-if-player-is-premium-message: |-
+    &7&l&m----------------&b DynamicPremium &7&l&m----------------
+    &7You have no access to the server because you're not premium.
+    &7&l&m------------------------------------------------
+  checking: |-
+    &7&l&m----------------&b DynamicPremium &7&l&m----------------
+    &7You have used the &a/premium &7command.
+    &7We'll verify your connection to ensure that you're
+    &7really using a bought Minecraft account and prevent
+    &7you from get locked out from your account.
+    &7Join again and we'll verify it :D
+    &7&l&m------------------------------------------------
+  premium-disabled: |-
+    &7&l&m----------------&b DynamicPremium &7&l&m----------------
+    &7You have disabled the premium authentication.
+    &7Your account is going to be "offline", so you'll have to login
+    &7with the password that you set when you created this account.
+    &7&l&m------------------------------------------------
+  invalid-nick:
+    &7&l&m----------------&b DynamicPremium &7&l&m----------------
+    &7The chosen name is not allowed.
+    &7&l&m------------------------------------------------
+send-lobby-message: "&aSending you to the lobby!"
+denied-command: "&cYou need to be authenticated in order to use this command!"
+
+premium-command:
+  player-only: "&cYou need to be an user to use this"
+  no-premium: "&cWe were not able to verify the identity of your account."
+  enabled: "&aIdentity verified, now you'll not need to put your password :D"
+  disabled: "&aYou've disabled the premium-mode"
+  config-disabled: "&aThis commands has been disabled by an administrator!"
