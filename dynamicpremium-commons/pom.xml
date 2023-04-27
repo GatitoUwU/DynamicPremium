@@ -87,7 +87,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version> <!-- Don't bump, newest version don't work with Java 8 -->
+            <version>4.0.3</version> <!-- Don't bump, the newest version don't work with Java 8 -->
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
