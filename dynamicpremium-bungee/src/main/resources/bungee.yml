@@ -1,4 +1,4 @@
 name: DynamicPremium
 version: '${project.version}'
-main: im.thatneko.dynamicpremium.bungee.DynamicPremium
+main: im.thatneko.dynamicpremium.bungee.DynamicPremiumBootstrap
 description: The simplest /premium plugin ever.

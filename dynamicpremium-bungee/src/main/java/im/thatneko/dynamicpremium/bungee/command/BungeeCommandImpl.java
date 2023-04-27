@@ -19,7 +19,7 @@ public class BungeeCommandImpl extends net.md_5.bungee.api.plugin.Command {
     private final Command command;
 
     public BungeeCommandImpl(DynamicPremium dynamicPremium, Command command) {
-        super(command.getName(), null, command.getAliases());
+        super(command.getName(), null, command.getAliases() == null ? new String[]{"dp-" + command.getName()} : command.getAliases());
 
         this.dynamicPremium = dynamicPremium;
         this.command = command;
