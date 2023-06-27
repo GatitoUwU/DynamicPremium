@@ -26,7 +26,7 @@ public class PremiumAdminCommand extends Command {
     @Override
     public void handle(DynamicPlayer dynamicPlayer, String[] args) {
         Config messagesConfig = dynamicPremium.getConfigManager().getMessagesConfig();
-        if (dynamicPlayer.hasPermission("dynamicpremium.admin")) {
+        if (!dynamicPlayer.hasPermission("dynamicpremium.admin")) {
             dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&')
                     .deserialize(messagesConfig.getString("admin.no-permission"))
             );
@@ -41,7 +41,7 @@ public class PremiumAdminCommand extends Command {
         }
         String subCommand = args[1];
         if (subCommand.equals("toggle")) {
-            String name = args[1];
+            String name = args[2];
             CompletableFuture.runAsync(() -> {
                 boolean isPlayerPremium = dynamicPremium.getDatabaseManager().getDatabase().isPlayerPremium(name);
                 if (isPlayerPremium) {
