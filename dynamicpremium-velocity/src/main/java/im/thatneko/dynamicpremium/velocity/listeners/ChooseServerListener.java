@@ -31,7 +31,7 @@ public class ChooseServerListener {
         Player player = event.getPlayer();
         Cache cache = dynamicPremium.getCacheManager().getOrCreateCache(player.getUsername());
         cache.updateUsage();
-        if (!cache.isPremium()) {
+        if (!cache.isPremium() && !cache.isGeyserUser()) {
             return;
         }
 

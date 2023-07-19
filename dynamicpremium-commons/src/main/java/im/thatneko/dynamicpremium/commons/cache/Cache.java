@@ -22,6 +22,7 @@ public class Cache {
     private boolean pendingVerification;
     private boolean onVerification;
     private boolean notifyCannotBePremium;
+    private boolean geyserUser;
 
     public void updateUsage() {
         lastConnection = System.currentTimeMillis();

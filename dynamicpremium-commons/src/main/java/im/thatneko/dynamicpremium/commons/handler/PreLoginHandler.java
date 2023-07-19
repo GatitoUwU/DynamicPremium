@@ -5,11 +5,13 @@ import im.thatneko.dynamicpremium.commons.cache.Cache;
 import im.thatneko.dynamicpremium.commons.config.Config;
 import im.thatneko.dynamicpremium.commons.database.Database;
 import im.thatneko.dynamicpremium.commons.event.DynamicPreLoginEvent;
+import im.thatneko.dynamicpremium.commons.utils.GeyserUtils;
 import im.thatneko.dynamicpremium.commons.utils.UUIDUtils;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.geysermc.floodgate.api.player.FloodgatePlayer;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -28,7 +30,25 @@ public class PreLoginHandler {
     private final Pattern allowedNickCharacters = Pattern.compile("[a-zA-Z0-9_]*");
 
     public void handlePreLogin(DynamicPreLoginEvent event) {
-        Cache cache = dynamicPremium.getCacheManager().getOrCreateCache(event.getUsername());
+        Config settingsConfig = dynamicPremium.getConfigManager().getSettingsConfig();
+
+        Cache cache;
+        // fixes the problem for the retards that have problems with floodgate
+        if (settingsConfig.getBoolean("direct-login-for-geyser-users")) {
+            String startWith = settingsConfig.getString("geyser-start-name-char");
+            FloodgatePlayer floodgatePlayer = GeyserUtils.getGeyserUser(startWith + event.getUsername());
+            if (floodgatePlayer != null) {
+                cache = dynamicPremium.getCacheManager().getOrCreateCache(startWith + event.getUsername());
+                cache.setUuid((UUID) null);
+                cache.updateUsage();
+                cache.setPremium(false);
+                cache.setGeyserUser(true);
+                event.markAsNoPremium();
+                return;
+            }
+        }
+
+        cache = dynamicPremium.getCacheManager().getOrCreateCache(event.getUsername());
         cache.updateUsage();
 
         if (!allowedNickCharacters.matcher(event.getUsername()).matches()) {
