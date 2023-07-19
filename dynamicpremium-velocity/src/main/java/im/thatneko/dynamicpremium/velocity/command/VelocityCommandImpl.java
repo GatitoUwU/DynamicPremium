@@ -22,7 +22,7 @@ public class VelocityCommandImpl implements SimpleCommand {
         this.dynamicPremium = dynamicPremium;
         this.command = command;
 
-        if (command.getAliases() != null) {
+        if (command.getAliases() == null) {
             dynamicPremium.getProxyServer().getCommandManager().register(
                     command.getName(), this
             );
