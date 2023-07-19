@@ -17,6 +17,7 @@ allowed-commands:
 
 allow-disable-premium: false
 direct-login-for-geyser-users: true
+geyser-start-name-char: "."
 
 premium-command-delay: 60000 #Millis
 # This is important.
