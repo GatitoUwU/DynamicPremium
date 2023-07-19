@@ -28,6 +28,6 @@ public class CommandManager {
     }
 
     public void register(Command command) {
-        commands.put(command.getName(), command);
+        this.commands.put(command.getName(), command);
     }
 }

@@ -38,8 +38,6 @@ public class DynamicPremium extends BaseDynamicPremium {
         );
 
         super.getCommandManager().getCommands().forEach((s, command) -> new BungeeCommandImpl(this, command));
-
-
         ProxyServer.getInstance().getScheduler().schedule(
                 plugin, new CacheTask(this), 500L, TimeUnit.MILLISECONDS
         );
