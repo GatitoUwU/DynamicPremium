@@ -21,6 +21,9 @@ public class PreConnectionListener {
 
     @Subscribe
     public void onPreLoginEvent(PreLoginEvent event) {
+        if (!event.getResult().isAllowed()) {
+            return;
+        }
         if (event.getConnection() == null || event.getUsername() == null) {
             event.setResult(PreLoginEvent.PreLoginComponentResult.denied(
                     Component.text("Error while processing your connection...")
