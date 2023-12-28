@@ -37,6 +37,7 @@ public class PremiumCommand extends Command {
                 dynamicPlayer.kickPlayer(LegacyComponentSerializer.legacy('&').deserialize(
                         dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.premium-disabled")
                 ));
+                this.dynamicPremium.getDatabaseManager().getDatabase().removePlayer(dynamicPlayer.getName());
             } else {
                 dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(
                         dynamicPremium.getConfigManager().getMessagesConfig().getString(

@@ -1,5 +1,6 @@
 package im.thatneko.dynamicpremium.velocity.listeners;
 
+import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.PreLoginEvent;
 import im.thatneko.dynamicpremium.velocity.DynamicPremium;
@@ -19,7 +20,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public class PreConnectionListener {
     private final DynamicPremium dynamicPremium;
 
-    @Subscribe
+    @Subscribe(order = PostOrder.LAST)
     public void onPreLoginEvent(PreLoginEvent event) {
         if (!event.getResult().isAllowed()) {
             return;
