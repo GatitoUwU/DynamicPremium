@@ -2,30 +2,68 @@
 # DynamicPremium by gatogamer#6666 #
 ####################################
 
-lobby-server: "lobby"
-
+# Servers that only Mojang authenticated players should be able to join.
 access-only-if-player-is-premium:
   - "premium-server-1"
 
+# Put here ALL your servers that handle authentication (AuthMe)
 auth-servers:
   - "auth"
+
+# List of commands that are accepted on your "auth-servers".
 allowed-commands:
   - "/l"
   - "/login"
   - "/reg"
   - "/register"
 
+# Your main-lobby server.
+lobby-server: "lobby"
+
+# If you enable this, players will be able to disable /premium authentication by themselves.
+# It's recommended to leave this disabled if your UUID mode is "PREMIUM".
 allow-disable-premium: false
-direct-login-for-geyser-users: true
+# Shall we ignore /login for authenticated Geyser users?
+# REQUIRES FLOODGATE!
+direct-login-for-geyser-users: false
+# This is the prefix of Bedrock's players.Needed for some verifications,
+# this should be the same chars that you set in floodgate's configuration.
+# For example"." for ".gatogamer_"
 geyser-start-name-char: "."
 
-premium-command-delay: 60000 #Millis
-# This is important.
-# PREMIUM (if you change your minecraft name, and you have premium uuid, you will have all things that you have in the other name)
-# NO_PREMIUM (if you change your minecraft name, you will lose your things, but if you're premium, and you put /premium, you will not lose your things xD)
-uuid-mode: PREMIUM #UUID modes available: PREMIUM, NO_PREMIUM.
+# How much time should we wait until players can toggle their premium status again?
+# This is measured in milliseconds. Therefor: seconds * 1000.
+premium-command-delay: 60000
 
+# This is very important.
+# This determinate which kind of UUIDs will DynamicPremium handle.
+# PREMIUM:
+#   Advantages:
+#   - Custom clients cosmetics (as they use the Mojang's UUID)
+#   - If you change your minecraft name, and you have premium uuid, you will have your player data intact.
+#  Disadvantages:
+#   - Players will lose their data in case they disable /premium.
+#   - If your server exists a long time ago, users may lose their things if they
+#     enable /premium because of their old offline-uuid.
+# NO_PREMIUM:
+#   Advantages:
+#   - Works fine with existent data, for example if your players already have data. They'll not lose it.
+#   - If you change your minecraft name, and you have premium uuid, you will have your player data intact.
+#   - Players can enable/disable their /premium status whenever they want and will not lose their data.
+#  Disadvantages:
+#   - Custom clients cosmetics are dropped with this, which means that you are not able to see dances,
+#     pets, capes, etc., from clients like Lunar.
+# Default is PREMIUM.
+# UUID modes available: PREMIUM, NO_PREMIUM.
+uuid-mode: PREMIUM
+
+# Checks if the player is premium in their first connection.
 check-if-player-is-premium-first-time:
   enabled: false
-  # Valid methods: MOJANG, CONNECTION (Connection is safer)
+  # Valid methods:
+  #   MOJANG: Asks to Mojang's API if the player is premium, but may hit a rate-limit.
+  #   CONNECTION: Tries to check if player is premium by enabling online-mode for them.
+  #   But if connection isn't successful, it'll set them as no-premium/offline.
+  #   They'll just have to relog.
+  # Default is CONNECTION.
   check-method: CONNECTION

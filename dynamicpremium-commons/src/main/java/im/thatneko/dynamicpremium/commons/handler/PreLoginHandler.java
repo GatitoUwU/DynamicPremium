@@ -49,6 +49,7 @@ public class PreLoginHandler {
         }
 
         cache = this.dynamicPremium.getCacheManager().getOrCreateCache(event.getUsername());
+        cache.setGeyserUser(false);
         cache.updateUsage();
 
         if (!this.allowedNickCharacters.matcher(event.getUsername()).matches()) {
