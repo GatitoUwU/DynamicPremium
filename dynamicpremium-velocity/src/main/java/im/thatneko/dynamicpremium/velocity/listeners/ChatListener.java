@@ -53,12 +53,12 @@ public class ChatListener {
         if (serverConnection == null) {
             return false;
         }
-        if (config.getStringList("auth-servers").contains(serverConnection.getServerInfo().getName())) {
+        if (this.config.getStringList("auth-servers").contains(serverConnection.getServerInfo().getName())) {
             String[] args = msg.split(" ");
-            if (!config.getStringList("allowed-commands").contains(args[0])) {
+            if (!this.config.getStringList("allowed-commands").contains(args[0])) {
                 player.sendMessage(
                         LegacyComponentSerializer.legacy('&').deserialize(
-                                messages.getString("denied-command")
+                                this.messages.getString("denied-command")
                         )
                 );
                 return false;

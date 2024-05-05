@@ -30,7 +30,7 @@ public class PreLoginHandler {
     private final Pattern allowedNickCharacters = Pattern.compile("[a-zA-Z0-9_]*");
 
     public void handlePreLogin(DynamicPreLoginEvent event) {
-        Config settingsConfig = dynamicPremium.getConfigManager().getSettingsConfig();
+        Config settingsConfig = this.dynamicPremium.getConfigManager().getSettingsConfig();
 
         Cache cache;
         // fixes the problem for the retards that have problems with floodgate
@@ -38,7 +38,7 @@ public class PreLoginHandler {
             String startWith = settingsConfig.getString("geyser-start-name-char");
             FloodgatePlayer floodgatePlayer = GeyserUtils.getGeyserUser(startWith + event.getUsername());
             if (floodgatePlayer != null) {
-                cache = dynamicPremium.getCacheManager().getOrCreateCache(startWith + event.getUsername());
+                cache = this.dynamicPremium.getCacheManager().getOrCreateCache(startWith + event.getUsername());
                 cache.setUuid((UUID) null);
                 cache.updateUsage();
                 cache.setPremium(false);
@@ -48,13 +48,13 @@ public class PreLoginHandler {
             }
         }
 
-        cache = dynamicPremium.getCacheManager().getOrCreateCache(event.getUsername());
+        cache = this.dynamicPremium.getCacheManager().getOrCreateCache(event.getUsername());
         cache.updateUsage();
 
-        if (!allowedNickCharacters.matcher(event.getUsername()).matches()) {
+        if (!this.allowedNickCharacters.matcher(event.getUsername()).matches()) {
             event.computeKick(
                     LegacyComponentSerializer.legacy('&').deserialize(
-                            dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.invalid-nick")
+                            this.dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.invalid-nick")
                     )
             );
             return;
@@ -95,7 +95,7 @@ public class PreLoginHandler {
     }
 
     public void doPremiumVerification(DynamicPreLoginEvent event, Cache cache) {
-        Database database = dynamicPremium.getDatabaseManager().getDatabase();
+        Database database = this.dynamicPremium.getDatabaseManager().getDatabase();
         if (database.isPlayerPremium(event.getUsername())) {
             event.markAsPremium();
             cache.setPremium(true);
@@ -103,7 +103,7 @@ public class PreLoginHandler {
             cache.setPremium(false);
             event.markAsNoPremium();
 
-            Config settings = dynamicPremium.getConfigManager().getSettingsConfig();
+            Config settings = this.dynamicPremium.getConfigManager().getSettingsConfig();
             String key = "check-if-player-is-premium-first-time";
             if (settings.getBoolean(key + ".enabled")) {
                 if (!database.wasPremiumChecked(event.getUsername())) {
@@ -130,14 +130,14 @@ public class PreLoginHandler {
 
     public void recheckUuid(Cache cache, DynamicPreLoginEvent event) {
         try {
-            String spoofedUUID = dynamicPremium.getDatabaseManager().getDatabase().getSpoofedUUID(event.getUsername());
+            String spoofedUUID = this.dynamicPremium.getDatabaseManager().getDatabase().getSpoofedUUID(event.getUsername());
             if (spoofedUUID != null) {
                 cache.setUuid(spoofedUUID);
                 event.setUniqueId(UUID.fromString(spoofedUUID));
                 return;
             }
 
-            String uuidMode = dynamicPremium.getConfigManager().getSettingsConfig().getString("uuid-mode", "PREMIUM");
+            String uuidMode = this.dynamicPremium.getConfigManager().getSettingsConfig().getString("uuid-mode", "PREMIUM");
             UUID offlineUuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + cache.getUsername())
                     .getBytes(StandardCharsets.UTF_8));
 

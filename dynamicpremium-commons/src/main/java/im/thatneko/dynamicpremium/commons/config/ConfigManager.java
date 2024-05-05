@@ -52,7 +52,7 @@ public class ConfigManager {
 
     @SneakyThrows
     public CommentedConfigurationNode loadConfig(String s) {
-        File file = new File(dataFolder, s + ".yml");
+        File file = new File(this.dataFolder, s + ".yml");
         if (!file.exists()) {
             try (InputStream in = getClass().getClassLoader().getResourceAsStream(s + ".yml")) {
                 file.createNewFile();

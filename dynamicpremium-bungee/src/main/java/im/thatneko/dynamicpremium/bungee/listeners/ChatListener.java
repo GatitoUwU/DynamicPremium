@@ -35,9 +35,9 @@ public class ChatListener implements Listener {
         if (server == null) {
             return false;
         }
-        if (config.getStringList("auth-servers").contains(server.getInfo().getName())) {
+        if (this.config.getStringList("auth-servers").contains(server.getInfo().getName())) {
             String[] args = msg.split(" ");
-            if (!config.getStringList("allowed-commands").contains(args[0])) {
+            if (!this.config.getStringList("allowed-commands").contains(args[0])) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', messages.getString("denied-command")));
                 return false;
             }

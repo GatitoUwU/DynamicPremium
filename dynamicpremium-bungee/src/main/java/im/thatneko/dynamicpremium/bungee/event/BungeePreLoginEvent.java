@@ -24,17 +24,17 @@ public class BungeePreLoginEvent implements DynamicPreLoginEvent {
 
     @Override
     public String getUsername() {
-        return preLoginEvent.getConnection().getName();
+        return this.preLoginEvent.getConnection().getName();
     }
 
     @Override
     public void lockEvent() {
-        preLoginEvent.registerIntent(dynamicPremium.getPlugin());
+        this.preLoginEvent.registerIntent(dynamicPremium.getBootstrap());
     }
 
     @Override
     public void unlockEvent() { // not needed on velowocity
-        preLoginEvent.completeIntent(dynamicPremium.getPlugin());
+        this.preLoginEvent.completeIntent(dynamicPremium.getBootstrap());
     }
 
     @Override
@@ -44,22 +44,22 @@ public class BungeePreLoginEvent implements DynamicPreLoginEvent {
 
     @Override
     public void markAsPremium() {
-        preLoginEvent.getConnection().setOnlineMode(true);
+        this.preLoginEvent.getConnection().setOnlineMode(true);
     }
 
     @Override
     public void markAsNoPremium() {
-        preLoginEvent.getConnection().setOnlineMode(false);
+        this.preLoginEvent.getConnection().setOnlineMode(false);
     }
 
     @Override
     public void computeKick(Component component) {
-        preLoginEvent.setCancelled(true);
-        preLoginEvent.setCancelReason(BungeeComponentSerializer.get().serialize(component));
+        this.preLoginEvent.setCancelled(true);
+        this.preLoginEvent.setCancelReason(BungeeComponentSerializer.get().serialize(component));
     }
 
     @Override
     public void setUniqueId(UUID uuid) {
-        UUIDUtils.setUuid(preLoginEvent.getConnection(), uuid);
+        UUIDUtils.setUuid(this.preLoginEvent.getConnection(), uuid);
     }
 }

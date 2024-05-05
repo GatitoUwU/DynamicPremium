@@ -20,7 +20,6 @@ public class VelocityDynamicPlayer extends DynamicPlayer {
     private final Player player;
     private final CommandSource source;
 
-
     public VelocityDynamicPlayer(DynamicPremium dynamicPremium, Player player) {
         this(dynamicPremium, player, player);
     }
@@ -33,38 +32,38 @@ public class VelocityDynamicPlayer extends DynamicPlayer {
 
     @Override
     public void sendMessage(Component message) {
-        source.sendMessage(message);
+        this.source.sendMessage(message);
     }
 
     @Override
     public void kickPlayer(Component reason) {
-        player.disconnect(reason);
+        this.player.disconnect(reason);
     }
 
     @Override
     public boolean hasPermission(String permission) {
-        return source.hasPermission(permission);
+        return this.source.hasPermission(permission);
     }
 
     @Override
     public String getName() {
-        return player == null ? "console" : player.getUsername();
+        return this.player == null ? "console" : this.player.getUsername();
     }
 
     @Override
     public UUID getUniqueId() {
-        return player.getUniqueId();
+        return this.player.getUniqueId();
     }
 
     @Override
     public void sendToServer(String s) {
-        dynamicPremium.getProxyServer().getServer(s).ifPresent(registeredServer ->
-                player.createConnectionRequest(registeredServer).fireAndForget()
+        this.dynamicPremium.getProxyServer().getServer(s).ifPresent(registeredServer ->
+                this.player.createConnectionRequest(registeredServer).fireAndForget()
         );
     }
 
     @Override
     public boolean isConsole() {
-        return player == null;
+        return this.player == null;
     }
 }

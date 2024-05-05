@@ -19,6 +19,6 @@ public class ConnectionListener {
 
     @Subscribe
     public void onPreLoginEvent(PostLoginEvent event) {
-        dynamicPremium.getPostLoginHandler().handlePostLogin(() -> new VelocityDynamicPlayer(dynamicPremium, event.getPlayer()));
+        this.dynamicPremium.getPostLoginHandler().handlePostLogin(() -> new VelocityDynamicPlayer(this.dynamicPremium, event.getPlayer()));
     }
 }

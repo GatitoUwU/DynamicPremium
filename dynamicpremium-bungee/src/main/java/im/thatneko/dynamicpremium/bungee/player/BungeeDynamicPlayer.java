@@ -23,7 +23,6 @@ public class BungeeDynamicPlayer extends DynamicPlayer {
     private final ProxiedPlayer player;
     private final CommandSender source;
 
-
     public BungeeDynamicPlayer(DynamicPremium dynamicPremium, ProxiedPlayer player) {
         this(dynamicPremium, player, player);
     }
@@ -36,27 +35,27 @@ public class BungeeDynamicPlayer extends DynamicPlayer {
 
     @Override
     public void sendMessage(Component message) {
-        source.sendMessage(BungeeComponentSerializer.get().serialize(message));
+        this.source.sendMessage(BungeeComponentSerializer.get().serialize(message));
     }
 
     @Override
     public void kickPlayer(Component reason) {
-        player.disconnect(BungeeComponentSerializer.get().serialize(reason));
+        this.player.disconnect(BungeeComponentSerializer.get().serialize(reason));
     }
 
     @Override
     public boolean hasPermission(String permission) {
-        return source.hasPermission(permission);
+        return this.source.hasPermission(permission);
     }
 
     @Override
     public String getName() {
-        return player == null ? "console" : player.getName();
+        return this.player == null ? "console" : this.player.getName();
     }
 
     @Override
     public UUID getUniqueId() {
-        return player.getUniqueId();
+        return this.player.getUniqueId();
     }
 
     @Override
@@ -65,11 +64,11 @@ public class BungeeDynamicPlayer extends DynamicPlayer {
         if (serverInfo == null) {
             return;
         }
-        player.connect(serverInfo);
+        this.player.connect(serverInfo);
     }
 
     @Override
     public boolean isConsole() {
-        return player == null;
+        return this.player == null;
     }
 }

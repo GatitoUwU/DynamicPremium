@@ -29,14 +29,14 @@ public class ChooseServerListener {
     @Subscribe(order = PostOrder.FIRST)
     public void onChooseServer(PlayerChooseInitialServerEvent event) {
         Player player = event.getPlayer();
-        Cache cache = dynamicPremium.getCacheManager().getOrCreateCache(player.getUsername());
+        Cache cache = this.dynamicPremium.getCacheManager().getOrCreateCache(player.getUsername());
         cache.updateUsage();
         if (!cache.isPremium() && !cache.isGeyserUser()) {
             return;
         }
 
-        String serverName = dynamicPremium.getConfigManager().getSettingsConfig().getString("lobby-server");
-        RegisteredServer registeredServer = dynamicPremium.getProxyServer().getServer(serverName).orElse(null);
+        String serverName = this.dynamicPremium.getConfigManager().getSettingsConfig().getString("lobby-server");
+        RegisteredServer registeredServer = this.dynamicPremium.getProxyServer().getServer(serverName).orElse(null);
 
         if (registeredServer == null) {
             System.out.println("DynamicPremium > The server " + serverName + " doesn't exist.");
@@ -49,10 +49,10 @@ public class ChooseServerListener {
     @Subscribe
     public void onPreConnect(ServerPreConnectEvent event) {
         Player player = event.getPlayer();
-        Cache cache = dynamicPremium.getCacheManager().getOrCreateCache(player.getUsername());
+        Cache cache = this.dynamicPremium.getCacheManager().getOrCreateCache(player.getUsername());
         cache.updateUsage();
-        Config settingsConfig = dynamicPremium.getConfigManager().getSettingsConfig();
-        Config messagesConfig = dynamicPremium.getConfigManager().getMessagesConfig();
+        Config settingsConfig = this.dynamicPremium.getConfigManager().getSettingsConfig();
+        Config messagesConfig = this.dynamicPremium.getConfigManager().getMessagesConfig();
         if (!cache.isPremium()) {
             List<String> onlyPremium = settingsConfig.getStringList("access-only-if-player-is-premium");
             if (onlyPremium.contains(event.getOriginalServer().getServerInfo().getName())) {

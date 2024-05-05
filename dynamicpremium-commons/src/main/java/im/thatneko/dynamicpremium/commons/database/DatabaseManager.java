@@ -23,21 +23,21 @@ public class DatabaseManager {
         switch (databaseType.toUpperCase()) {
             case "MYSQL": {
                 System.out.println("DynamicPremium > Loading MySQL database based on MySQL Connector.");
-                database = new MySQLDatabase();
+                this.database = new MySQLDatabase();
                 break;
             }
             case "MYSQL-HIKARI": {
                 System.out.println("DynamicPremium > Loading MySQL database based on HikariCP.");
-                database = new HikariMySQLDatabase();
+                this.database = new HikariMySQLDatabase();
                 break;
             }
             default: {
                 System.out.println("DynamicPremium > Loading Flatfile database!");
-                database = new FlatfileDatabase();
+                this.database = new FlatfileDatabase();
                 break;
             }
         }
 
-        database.loadDatabase(config, this);
+        this.database.loadDatabase(config, this);
     }
 }

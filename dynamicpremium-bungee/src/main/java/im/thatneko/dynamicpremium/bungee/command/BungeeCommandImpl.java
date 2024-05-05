@@ -24,12 +24,12 @@ public class BungeeCommandImpl extends net.md_5.bungee.api.plugin.Command {
         this.dynamicPremium = dynamicPremium;
         this.command = command;
 
-        ProxyServer.getInstance().getPluginManager().registerCommand(dynamicPremium.getPlugin(), this);
+        ProxyServer.getInstance().getPluginManager().registerCommand(dynamicPremium.getBootstrap(), this);
     }
 
     @Override
     public void execute(CommandSender sender, String[] strings) {
         ProxiedPlayer player = sender instanceof ProxiedPlayer ? (ProxiedPlayer) sender : null;
-        command.handle(new BungeeDynamicPlayer(dynamicPremium, player, sender), strings);
+        this.command.handle(new BungeeDynamicPlayer(this.dynamicPremium, player, sender), strings);
     }
 }

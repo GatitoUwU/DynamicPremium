@@ -23,10 +23,10 @@ public class PostLoginHandler {
 
     public void handlePostLogin(DynamicPostLoginEvent event) {
         DynamicPlayer dynamicPlayer = event.getDynamicPlayer();
-        Cache cache = dynamicPremium.getCacheManager().getOrCreateCache(dynamicPlayer.getName());
+        Cache cache = this.dynamicPremium.getCacheManager().getOrCreateCache(dynamicPlayer.getName());
         cache.updateUsage();
 
-        Config messages = dynamicPremium.getConfigManager().getMessagesConfig();
+        Config messages = this.dynamicPremium.getConfigManager().getMessagesConfig();
         if (cache.isOnVerification()) {
             cache.setOnVerification(false);
             cache.setPendingVerification(false);
@@ -35,7 +35,7 @@ public class PostLoginHandler {
                     LegacyComponentSerializer.legacy('&').deserialize(messages.getString("premium-command.enabled"))
             );
             CompletableFuture.runAsync(() -> {
-                dynamicPremium.getDatabaseManager().getDatabase().addPlayer(dynamicPlayer.getName());
+                this.dynamicPremium.getDatabaseManager().getDatabase().addPlayer(dynamicPlayer.getName());
             });
         }
         if (cache.isNotifyCannotBePremium()) {

@@ -64,7 +64,7 @@ public class FlatfileDatabase implements Database {
     }
 
     public File getFile(String name) {
-        File premiumFolder = new File(databaseManager.getDataFolder(), "premiumUsers");
+        File premiumFolder = new File(this.databaseManager.getDataFolder(), "premiumUsers");
         premiumFolder.mkdirs();
         return new File(premiumFolder, name + ".yml");
     }
@@ -81,13 +81,13 @@ public class FlatfileDatabase implements Database {
     }
 
     public File getCheckedFile(String name) {
-        File premiumFolder = new File(databaseManager.getDataFolder(), "premiumWasCheckedUsers");
+        File premiumFolder = new File(this.databaseManager.getDataFolder(), "premiumWasCheckedUsers");
         premiumFolder.mkdirs();
         return new File(premiumFolder, name + ".yml");
     }
 
     public File getSpoofedFile(String name) {
-        File premiumFolder = new File(databaseManager.getDataFolder(), "spoofedUsers");
+        File premiumFolder = new File(this.databaseManager.getDataFolder(), "spoofedUsers");
         premiumFolder.mkdirs();
         return new File(premiumFolder, name + ".yml");
     }

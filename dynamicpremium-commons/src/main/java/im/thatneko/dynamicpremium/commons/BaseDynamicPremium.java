@@ -35,7 +35,7 @@ public class BaseDynamicPremium {
 
         this.cacheManager = new CacheManager();
         this.configManager = new ConfigManager(baseFolder);
-        this.databaseManager = new DatabaseManager(configManager.getDatabaseConfig(), baseFolder);
+        this.databaseManager = new DatabaseManager(this.configManager.getDatabaseConfig(), baseFolder);
         this.commandManager = new CommandManager(this);
 
         this.preLoginHandler = new PreLoginHandler(this);

@@ -25,18 +25,18 @@ public class Cache {
     private boolean geyserUser;
 
     public void updateUsage() {
-        lastConnection = System.currentTimeMillis();
+        this.lastConnection = System.currentTimeMillis();
     }
 
     public boolean shouldPurge() {
-        return System.currentTimeMillis() - lastConnection > 60000L;
+        return System.currentTimeMillis() - this.lastConnection > 60000L;
     }
 
     public void setUuid(String stringUUID) {
         if (stringUUID.contains("-")) {
-            uuid = UUID.fromString(stringUUID);
+            this.uuid = UUID.fromString(stringUUID);
         } else {
-            uuid = UUID.fromString(UUIDUtils.insertDashUUID(stringUUID));
+            this.uuid = UUID.fromString(UUIDUtils.insertDashUUID(stringUUID));
         }
     }
 

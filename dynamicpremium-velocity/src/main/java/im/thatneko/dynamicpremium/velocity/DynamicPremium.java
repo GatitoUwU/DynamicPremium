@@ -49,11 +49,11 @@ public class DynamicPremium extends BaseDynamicPremium {
                 new ConnectionListener(this),
                 new PreConnectionListener(this),
                 new ProfileRequestListener(this)
-        ).forEach(listener -> proxyServer.getEventManager().register(this, listener));
+        ).forEach(listener -> this.proxyServer.getEventManager().register(this, listener));
 
         super.getCommandManager().getCommands().forEach((s, command) -> new VelocityCommandImpl(this, command));
 
-        proxyServer.getScheduler().buildTask(this, new CacheTask(this))
+        this.proxyServer.getScheduler().buildTask(this, new CacheTask(this))
                 .repeat(Duration.ofMillis(500)).schedule();
     }
 }

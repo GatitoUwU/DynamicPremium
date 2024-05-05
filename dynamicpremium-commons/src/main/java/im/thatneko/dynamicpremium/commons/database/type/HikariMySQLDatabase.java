@@ -23,8 +23,8 @@ public class HikariMySQLDatabase implements Database {
 
     @Override
     public void loadDatabase(Config config, DatabaseManager databaseManager) {
-        hikari = new HikariDataSource();
-        hikari.setJdbcUrl(
+        this.hikari = new HikariDataSource();
+        this.hikari.setJdbcUrl(
                 String.format(
                         "jdbc:mysql://%s:%s/%s",
                         config.getString("mysql.host"),
@@ -32,27 +32,27 @@ public class HikariMySQLDatabase implements Database {
                         config.getString("mysql.database")
                 )
         );
-        hikari.setDriverClassName("im.thatneko.dynamicpremium.libs.mysql.jdbc.Driver");
+        this.hikari.setDriverClassName("im.thatneko.dynamicpremium.libs.mysql.jdbc.Driver");
 
-        hikari.addDataSourceProperty("verifyServerCertificate", "false");
-        hikari.addDataSourceProperty("cachePrepStmts", "true");
-        hikari.addDataSourceProperty("prepStmtCacheSize", "250");
-        hikari.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        hikari.addDataSourceProperty("characterEncoding", "utf8");
-        hikari.addDataSourceProperty("encoding", "UTF-8");
-        hikari.addDataSourceProperty("useUnicode", "true");
-        hikari.addDataSourceProperty("useSSL", "false");
-        hikari.addDataSourceProperty("requireSSL", "false");
+        this.hikari.addDataSourceProperty("verifyServerCertificate", "false");
+        this.hikari.addDataSourceProperty("cachePrepStmts", "true");
+        this.hikari.addDataSourceProperty("prepStmtCacheSize", "250");
+        this.hikari.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        this.hikari.addDataSourceProperty("characterEncoding", "utf8");
+        this.hikari.addDataSourceProperty("encoding", "UTF-8");
+        this.hikari.addDataSourceProperty("useUnicode", "true");
+        this.hikari.addDataSourceProperty("useSSL", "false");
+        this.hikari.addDataSourceProperty("requireSSL", "false");
 
-        hikari.setUsername(config.getString("mysql.username"));
-        hikari.setPassword(config.getString("mysql.password"));
-        hikari.setMaxLifetime(180000L);
-        hikari.setIdleTimeout(60000L);
-        hikari.setMinimumIdle(1);
-        hikari.setMaximumPoolSize(16);
+        this.hikari.setUsername(config.getString("mysql.username"));
+        this.hikari.setPassword(config.getString("mysql.password"));
+        this.hikari.setMaxLifetime(180000L);
+        this.hikari.setIdleTimeout(60000L);
+        this.hikari.setMinimumIdle(1);
+        this.hikari.setMaximumPoolSize(16);
 
         config.getStringList("mysql.properties").forEach(s ->
-                hikari.addDataSourceProperty(s.split("=")[0], s.split("=")[1])
+                this.hikari.addDataSourceProperty(s.split("=")[0], s.split("=")[1])
         );
 
         try {
@@ -77,7 +77,7 @@ public class HikariMySQLDatabase implements Database {
      */
     @Override
     public boolean isPlayerPremium(String name) {
-        try (Connection connection = hikari.getConnection()) {
+        try (Connection connection = this.hikari.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM PremiumUsers WHERE PlayerName='" + name + "'")) {
                 ResultSet rs = stmt.executeQuery();
                 boolean isPremium = (rs.next() && rs.getString("PlayerName") != null);
@@ -97,7 +97,7 @@ public class HikariMySQLDatabase implements Database {
      */
     @Override
     public String getSpoofedUUID(String name) {
-        try (Connection connection = hikari.getConnection()) {
+        try (Connection connection = this.hikari.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM SpoofedUUIDs WHERE PlayerName='" + name + "'")) {
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
@@ -160,7 +160,7 @@ public class HikariMySQLDatabase implements Database {
 
     @Override
     public boolean wasPremiumChecked(String name) {
-        try (Connection connection = hikari.getConnection()) {
+        try (Connection connection = this.hikari.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM CheckedUsers WHERE PlayerName='" + name + "'")) {
                 ResultSet rs = stmt.executeQuery();
                 boolean isPremium = (rs.next() && rs.getString("PlayerName") != null);
@@ -181,7 +181,7 @@ public class HikariMySQLDatabase implements Database {
     }
 
     public void update(String qry) {
-        try (Connection connection = hikari.getConnection()) {
+        try (Connection connection = this.hikari.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(qry)) {
                 statement.executeUpdate();
             }

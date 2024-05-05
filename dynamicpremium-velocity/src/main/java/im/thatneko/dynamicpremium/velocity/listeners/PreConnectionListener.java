@@ -32,6 +32,6 @@ public class PreConnectionListener {
             ));
             return;
         }
-        dynamicPremium.getPreLoginHandler().handlePreLogin(new VelocityPreLoginEvent(event));
+        this.dynamicPremium.getPreLoginHandler().handlePreLogin(new VelocityPreLoginEvent(event));
     }
 }

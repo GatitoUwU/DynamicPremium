@@ -36,8 +36,8 @@ public class VelocityCommandImpl implements SimpleCommand {
     @Override
     public void execute(Invocation invocation) {
         CommandSource source = invocation.source();
-        command.handle(
-                new VelocityDynamicPlayer(dynamicPremium, source instanceof Player ? (Player) source : null, source),
+        this.command.handle(
+                new VelocityDynamicPlayer(this.dynamicPremium, source instanceof Player ? (Player) source : null, source),
                 invocation.arguments()
         );
     }

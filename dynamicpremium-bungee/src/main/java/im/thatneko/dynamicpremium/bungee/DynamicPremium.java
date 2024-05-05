@@ -22,11 +22,11 @@ import java.util.concurrent.TimeUnit;
  */
 @Getter
 public class DynamicPremium extends BaseDynamicPremium {
-    private final DynamicPremiumBootstrap plugin;
+    private final DynamicPremiumBootstrap bootstrap;
 
     public DynamicPremium(DynamicPremiumBootstrap dynamicPremiumBootstrap) {
         super(dynamicPremiumBootstrap.getDataFolder());
-        this.plugin = dynamicPremiumBootstrap;
+        this.bootstrap = dynamicPremiumBootstrap;
 
         Arrays.asList(
                 new ChatListener(getConfigManager().getSettingsConfig(), getConfigManager().getMessagesConfig()),
@@ -39,7 +39,7 @@ public class DynamicPremium extends BaseDynamicPremium {
 
         super.getCommandManager().getCommands().forEach((s, command) -> new BungeeCommandImpl(this, command));
         ProxyServer.getInstance().getScheduler().schedule(
-                plugin, new CacheTask(this), 500L, TimeUnit.MILLISECONDS
+                this.bootstrap, new CacheTask(this), 500L, TimeUnit.MILLISECONDS
         );
     }
 }

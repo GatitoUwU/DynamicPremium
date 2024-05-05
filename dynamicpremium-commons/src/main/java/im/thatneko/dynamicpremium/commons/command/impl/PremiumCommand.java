@@ -30,17 +30,17 @@ public class PremiumCommand extends Command {
             return;
         }
 
-        Cache cache = dynamicPremium.getCacheManager().getOrCreateCache(dynamicPlayer.getName());
+        Cache cache = this.dynamicPremium.getCacheManager().getOrCreateCache(dynamicPlayer.getName());
         if (cache.isPremium()) {
-            if (dynamicPremium.getConfigManager().getSettingsConfig().getBoolean("allow-disable-premium")) {
+            if (this.dynamicPremium.getConfigManager().getSettingsConfig().getBoolean("allow-disable-premium")) {
                 cache.setPremium(false);
                 dynamicPlayer.kickPlayer(LegacyComponentSerializer.legacy('&').deserialize(
-                        dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.premium-disabled")
+                        this.dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.premium-disabled")
                 ));
                 this.dynamicPremium.getDatabaseManager().getDatabase().removePlayer(dynamicPlayer.getName());
             } else {
                 dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(
-                        dynamicPremium.getConfigManager().getMessagesConfig().getString(
+                        this.dynamicPremium.getConfigManager().getMessagesConfig().getString(
                                 "premium-command.config-disabled"
                         )
                 ));
@@ -48,7 +48,7 @@ public class PremiumCommand extends Command {
             return;
         }
         dynamicPlayer.kickPlayer(LegacyComponentSerializer.legacy('&').deserialize(
-                dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.checking")
+                this.dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.checking")
         ));
         cache.setPendingVerification(true);
         cache.setOnVerification(false);

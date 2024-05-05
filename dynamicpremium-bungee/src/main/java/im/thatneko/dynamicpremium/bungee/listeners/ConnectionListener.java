@@ -20,6 +20,6 @@ public class ConnectionListener implements Listener {
 
     @EventHandler
     public void onPreLoginEvent(PostLoginEvent event) {
-        dynamicPremium.getPostLoginHandler().handlePostLogin(() -> new BungeeDynamicPlayer(dynamicPremium, event.getPlayer()));
+        this.dynamicPremium.getPostLoginHandler().handlePostLogin(() -> new BungeeDynamicPlayer(this.dynamicPremium, event.getPlayer()));
     }
 }

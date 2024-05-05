@@ -30,6 +30,6 @@ public class PreConnectionListener implements Listener {
             event.setCancelReason(textComponent);
             return;
         }
-        dynamicPremium.getPreLoginHandler().handlePreLogin(new BungeePreLoginEvent(dynamicPremium, event));
+        this.dynamicPremium.getPreLoginHandler().handlePreLogin(new BungeePreLoginEvent(this.dynamicPremium, event));
     }
 }

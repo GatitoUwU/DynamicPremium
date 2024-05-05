@@ -34,7 +34,7 @@ public class MySQLDatabase implements Database {
                     properties.setProperty(s.split("=")[0], s.split("=")[1])
             );
 
-            connection = DriverManager.getConnection(
+            this.connection = DriverManager.getConnection(
                     String.format(
                             "jdbc:mysql://%s:%s/%s",
                             config.getString("mysql.host"),
@@ -115,7 +115,7 @@ public class MySQLDatabase implements Database {
 
     public void update(String qry) {
         try {
-            connection.createStatement().executeUpdate(qry);
+            this.connection.createStatement().executeUpdate(qry);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -123,7 +123,7 @@ public class MySQLDatabase implements Database {
 
     public void quietUpdate(String qry) {
         try {
-            connection.createStatement().executeUpdate(qry);
+            this.connection.createStatement().executeUpdate(qry);
         } catch (SQLException e) {
             //e.printStackTrace();
         }
@@ -135,7 +135,7 @@ public class MySQLDatabase implements Database {
      * @param query The thing than you'll ask to MySQL.
      */
     public ResultSet query(String query) throws SQLException {
-        Statement stmt = connection.createStatement();
+        Statement stmt = this.connection.createStatement();
         try {
             stmt.executeQuery(query);
             return stmt.getResultSet();

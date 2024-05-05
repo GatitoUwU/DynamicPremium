@@ -29,8 +29,8 @@ public class ChooseServerListener implements Listener {
         ProxiedPlayer player = event.getPlayer();
         Cache cache = dynamicPremium.getCacheManager().getOrCreateCache(player.getName());
         cache.updateUsage();
-        Config settingsConfig = dynamicPremium.getConfigManager().getSettingsConfig();
-        Config messagesConfig = dynamicPremium.getConfigManager().getMessagesConfig();
+        Config settingsConfig = this.dynamicPremium.getConfigManager().getSettingsConfig();
+        Config messagesConfig = this.dynamicPremium.getConfigManager().getMessagesConfig();
         if (!cache.isPremium()) {
             List<String> onlyPremium = settingsConfig.getStringList("access-only-if-player-is-premium");
             if (onlyPremium.contains(event.getTarget().getName().toLowerCase())) {

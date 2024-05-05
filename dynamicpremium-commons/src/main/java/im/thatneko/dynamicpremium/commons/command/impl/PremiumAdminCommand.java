@@ -43,12 +43,12 @@ public class PremiumAdminCommand extends Command {
         if (subCommand.equals("toggle")) {
             String name = args[2];
             CompletableFuture.runAsync(() -> {
-                boolean isPlayerPremium = dynamicPremium.getDatabaseManager().getDatabase().isPlayerPremium(name);
+                boolean isPlayerPremium = this.dynamicPremium.getDatabaseManager().getDatabase().isPlayerPremium(name);
                 if (isPlayerPremium) {
-                    dynamicPremium.getDatabaseManager().getDatabase().removePlayer(name);
+                    this.dynamicPremium.getDatabaseManager().getDatabase().removePlayer(name);
                 } else {
-                    dynamicPremium.getDatabaseManager().getDatabase().addPremiumWasCheckedPlayer(name);
-                    dynamicPremium.getDatabaseManager().getDatabase().addPlayer(name);
+                    this.dynamicPremium.getDatabaseManager().getDatabase().addPremiumWasCheckedPlayer(name);
+                    this.dynamicPremium.getDatabaseManager().getDatabase().addPlayer(name);
                 }
                 dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(
                         messagesConfig.getString("admin.toggle." + (isPlayerPremium ? "disabled" : "enabled"))

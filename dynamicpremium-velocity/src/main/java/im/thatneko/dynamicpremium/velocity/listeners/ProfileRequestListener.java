@@ -22,7 +22,7 @@ public class ProfileRequestListener {
     public void onGameProfileEvent(GameProfileRequestEvent event) {
         String username = event.getUsername();
 
-        Cache cache = dynamicPremium.getCacheManager().getOrCreateCache(username);
+        Cache cache = this.dynamicPremium.getCacheManager().getOrCreateCache(username);
         cache.updateUsage();
         if (cache.getUuid() != null) {
             event.setGameProfile(event.getGameProfile().withId(cache.getUuid()));

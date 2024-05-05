@@ -18,8 +18,8 @@ public class CacheTask implements Runnable {
     @Override
     public void run() {
         ProxyServer.getInstance().getPlayers().forEach(proxiedPlayer ->
-                dynamicPremium.getCacheManager().getOrCreateCache(proxiedPlayer.getName()).updateUsage()
+                this.dynamicPremium.getCacheManager().getOrCreateCache(proxiedPlayer.getName()).updateUsage()
         );
-        dynamicPremium.getCacheManager().tick();
+        this.dynamicPremium.getCacheManager().tick();
     }
 }

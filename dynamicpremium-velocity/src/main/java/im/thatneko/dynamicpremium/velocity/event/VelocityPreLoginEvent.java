@@ -20,7 +20,7 @@ public class VelocityPreLoginEvent implements DynamicPreLoginEvent {
 
     @Override
     public String getUsername() {
-        return preLoginEvent.getUsername();
+        return this.preLoginEvent.getUsername();
     }
 
     @Override
@@ -38,17 +38,17 @@ public class VelocityPreLoginEvent implements DynamicPreLoginEvent {
 
     @Override
     public void markAsPremium() {
-        preLoginEvent.setResult(PreLoginEvent.PreLoginComponentResult.forceOnlineMode());
+        this.preLoginEvent.setResult(PreLoginEvent.PreLoginComponentResult.forceOnlineMode());
     }
 
     @Override
     public void markAsNoPremium() {
-        preLoginEvent.setResult(PreLoginEvent.PreLoginComponentResult.forceOfflineMode());
+        this.preLoginEvent.setResult(PreLoginEvent.PreLoginComponentResult.forceOfflineMode());
     }
 
     @Override
     public void computeKick(Component component) {
-        preLoginEvent.setResult(PreLoginEvent.PreLoginComponentResult.denied(component));
+        this.preLoginEvent.setResult(PreLoginEvent.PreLoginComponentResult.denied(component));
     }
 
     @Override
