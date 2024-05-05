@@ -16,13 +16,47 @@ import java.util.UUID;
  */
 @UtilityClass
 public class UUIDUtils {
-    public void setUuid(PendingConnection pendingConnection, UUID uuid) {
+    private static Field uniqueId;
+    private static Field offlineId;
+    private static Field rewriteId;
+
+    static {
         try {
-            Field field = InitialHandler.class.getDeclaredField("uniqueId");
-            field.setAccessible(true);
-            field.set(pendingConnection, uuid);
-        } catch (NoSuchFieldException | IllegalAccessException noSuchFieldException) {
-            noSuchFieldException.printStackTrace();
+            uniqueId = InitialHandler.class.getDeclaredField("uniqueId");
+            uniqueId.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            uniqueId = null;
+        }
+        try {
+            offlineId = InitialHandler.class.getDeclaredField("offlineId");
+            offlineId.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            offlineId = null;
+        }
+        try {
+            rewriteId = InitialHandler.class.getDeclaredField("rewriteId");
+            rewriteId.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            rewriteId = null;
+        }
+    }
+
+    public void setUuid(PendingConnection pendingConnection, UUID uuid) {
+        setUUIDField(uniqueId, pendingConnection, uuid);
+        setUUIDField(offlineId, pendingConnection, uuid);
+        setUUIDField(rewriteId, pendingConnection, uuid);
+    }
+
+    public void setUUIDField(Field field, PendingConnection pendingConnection, UUID uuid) {
+        if (uniqueId == null) {
+            return;
+        }
+        try {
+            uniqueId.set(pendingConnection, uuid);
+        } catch (Exception ignored) {
         }
     }
 }
