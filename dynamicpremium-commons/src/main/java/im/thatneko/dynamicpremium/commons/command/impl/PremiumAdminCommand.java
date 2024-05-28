@@ -39,9 +39,9 @@ public class PremiumAdminCommand extends Command {
             );
             return;
         }
-        String subCommand = args[1];
+        String subCommand = args[0];
         if (subCommand.equals("toggle")) {
-            String name = args[2];
+            String name = args[1];
             CompletableFuture.runAsync(() -> {
                 boolean isPlayerPremium = this.dynamicPremium.getDatabaseManager().getDatabase().isPlayerPremium(name);
                 if (isPlayerPremium) {
@@ -51,13 +51,10 @@ public class PremiumAdminCommand extends Command {
                     this.dynamicPremium.getDatabaseManager().getDatabase().addPlayer(name);
                 }
                 dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(
-                        messagesConfig.getString("admin.toggle." + (isPlayerPremium ? "disabled" : "enabled"))
+                        messagesConfig.getString("admin.toggled." + (isPlayerPremium ? "disabled" : "enabled"))
                                 .replace("%player%", name)
                 ));
             });
-            dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&')
-                    .deserialize(messagesConfig.getString("admin.toggled.enabled"))
-            );
         }
     }
 }
