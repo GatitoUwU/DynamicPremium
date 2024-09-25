@@ -113,6 +113,9 @@ public class PreLoginHandler {
                         if (UUIDUtils.getOnlineUUID(event.getUsername()) != null) {
                             event.markAsPremium();
                             cache.setPremium(true);
+                            cache.setPendingVerification(false);
+                            cache.setOnVerification(false);
+                            database.addPlayer(event.getUsername());
                         }
                     } else {
                         event.markAsPremium();
