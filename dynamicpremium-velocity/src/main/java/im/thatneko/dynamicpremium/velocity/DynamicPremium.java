@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 @Plugin(
         id = "dynamicpremium-velocity",
         name = "DynamicPremium",
-        version = "2.0-R3C0D3",
+        version = "2.0.1",
         description = "The simplest /premium plugin ever.",
         url = "https://thatneko.im",
         authors = {"gatogamer"}
