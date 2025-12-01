@@ -3,6 +3,8 @@ package im.thatneko.dynamicpremium.commons.handler;
 import im.thatneko.dynamicpremium.commons.BaseDynamicPremium;
 import im.thatneko.dynamicpremium.commons.cache.Cache;
 import im.thatneko.dynamicpremium.commons.config.Config;
+import im.thatneko.dynamicpremium.commons.database.LoginTristate;
+import im.thatneko.dynamicpremium.commons.database.data.VerificationData;
 import im.thatneko.dynamicpremium.commons.event.DynamicPostLoginEvent;
 import im.thatneko.dynamicpremium.commons.player.DynamicPlayer;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +29,11 @@ public class PostLoginHandler {
         cache.updateUsage();
 
         Config messages = this.dynamicPremium.getConfigManager().getMessagesConfig();
-        if (cache.isOnVerification()) {
-            cache.setOnVerification(false);
-            cache.setPendingVerification(false);
+        VerificationData verificationData = cache.getVerificationData();
+        LoginTristate trostate = verificationData.getLoginTristate();
+        if (trostate.isOnVerification()) {
+            verificationData.setLoginTristate(LoginTristate.NOTHING);
+            this.dynamicPremium.getDatabaseManager().getDatabase().updatePlayerVerification(verificationData);
             System.out.println(dynamicPlayer.getName() + " was verified, notifying them.");
             dynamicPlayer.sendMessage(
                     LegacyComponentSerializer.legacy('&').deserialize(messages.getString("premium-command.enabled"))

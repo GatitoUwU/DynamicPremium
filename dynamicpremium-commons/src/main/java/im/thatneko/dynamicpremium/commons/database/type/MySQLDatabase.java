@@ -1,7 +1,7 @@
 package im.thatneko.dynamicpremium.commons.database.type;
 
 import im.thatneko.dynamicpremium.commons.config.Config;
-import im.thatneko.dynamicpremium.commons.database.Database;
+import im.thatneko.dynamicpremium.commons.database.AbstractSQLDatabase;
 import im.thatneko.dynamicpremium.commons.database.DatabaseManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import java.util.Properties;
 
 @Getter
 @Setter
-public class MySQLDatabase implements Database {
+public class MySQLDatabase extends AbstractSQLDatabase {
     private Connection connection;
 
     @Override
@@ -43,12 +43,7 @@ public class MySQLDatabase implements Database {
                     ),
                     properties
             );
-            update("CREATE TABLE IF NOT EXISTS PremiumUsers (PlayerName VARCHAR(100), Enabled VARCHAR(100))");
-            update("CREATE TABLE IF NOT EXISTS CheckedUsers (PlayerName VARCHAR(100), Enabled VARCHAR(100))");
-            update("CREATE TABLE IF NOT EXISTS SpoofedUUIDs (PlayerName VARCHAR(100), SpoofedUUID VARCHAR(100))");
-            quietUpdate("CREATE UNIQUE INDEX premiumIndex ON PremiumUsers (PlayerName, Enabled)");
-            quietUpdate("CREATE UNIQUE INDEX checkedIndex ON CheckedUsers (PlayerName, Enabled)");
-            quietUpdate("CREATE UNIQUE INDEX uuidIndex ON SpoofedUUIDs (PlayerName, SpoofedUUID)");
+            fireUp();
             System.out.println("DynamicPremium > Connected to MySQL!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,62 +52,10 @@ public class MySQLDatabase implements Database {
         }
     }
 
-    /**
-     * Makes a request to MySQL to get if a player exist in database.
-     *
-     * @param name The player name.
-     */
-    @Override
-    public boolean isPlayerPremium(String name) {
-        try {
-            ResultSet rs = query("SELECT * FROM PremiumUsers WHERE PlayerName='" + name + "'");
-            return (rs.next() && rs.getString("PlayerName") != null);
-        } catch (SQLException e) {
-            return false;
-        }
-    }
 
-
-    /**
-     * Creates a new user in MySQL.
-     *
-     * @param name The player name.
-     */
-    @Override
-    public void addPlayer(String name) {
-        if (!isPlayerPremium(name)) {
-            update("INSERT INTO PremiumUsers (PlayerName, Enabled) VALUES ('" + name + "', 'true')");
-        }
-    }
-
-    /**
-     * Deletes an user from MySQL.
-     *
-     * @param name: The name from user to delete on MySQL.
-     */
-    @Override
-    public void removePlayer(String name) {
-        update("DELETE FROM PremiumUsers WHERE PlayerName='" + name + "'");
-    }
 
 
     @Override
-    public boolean wasPremiumChecked(String name) {
-        try {
-            ResultSet rs = query("SELECT * FROM CheckedUsers WHERE PlayerName='" + name + "'");
-            return (rs.next() && rs.getString("PlayerName") != null);
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public void addPremiumWasCheckedPlayer(String name) {
-        if (!wasPremiumChecked(name)) {
-            update("INSERT INTO CheckedUsers (PlayerName, Enabled) VALUES ('" + name + "', 'true')");
-        }
-    }
-
     public void update(String qry) {
         try {
             this.connection.createStatement().executeUpdate(qry);
@@ -121,6 +64,7 @@ public class MySQLDatabase implements Database {
         }
     }
 
+    @Override
     public void quietUpdate(String qry) {
         try {
             this.connection.createStatement().executeUpdate(qry);
@@ -144,46 +88,6 @@ public class MySQLDatabase implements Database {
             System.out.println("---------------------------------------------------------------");
             e.printStackTrace();
             System.out.println("---------------------------------------------------------------");
-            return null;
-        }
-    }
-
-    /**
-     * Creates a new user in MySQL.
-     *
-     * @param name The player name.
-     */
-    @Override
-    public void addSpoofedUUID(String name, String uuid) {
-        String spoofedRequest = getSpoofedUUID(name);
-        if (spoofedRequest == null) {
-            update("INSERT INTO SpoofedUUIDs (PlayerName, SpoofedUUID) VALUES ('" + name + "', '" + uuid + "')");
-        }
-    }
-
-    /**
-     * Deletes an user from MySQL.
-     *
-     * @param name: The name from user to delete on MySQL.
-     */
-    @Override
-    public void removeSpoofedUUID(String name) {
-        update("DELETE FROM SpoofedUUIDs WHERE PlayerName='" + name + "'");
-    }
-
-    /**
-     * Makes a request to MySQL to get if a player exist in database.
-     *
-     * @param name The player name.
-     */
-    @Override
-    public String getSpoofedUUID(String name) {
-        try (ResultSet rs = query("SELECT * FROM SpoofedUUIDs WHERE PlayerName='" + name + "'")) {
-            if (rs.next()) {
-                return rs.getString("SpoofedUUID");
-            }
-            return null;
-        } catch (SQLException e) {
             return null;
         }
     }

@@ -3,6 +3,8 @@ package im.thatneko.dynamicpremium.commons.command.impl;
 import im.thatneko.dynamicpremium.commons.BaseDynamicPremium;
 import im.thatneko.dynamicpremium.commons.cache.Cache;
 import im.thatneko.dynamicpremium.commons.command.Command;
+import im.thatneko.dynamicpremium.commons.database.LoginTristate;
+import im.thatneko.dynamicpremium.commons.database.data.VerificationData;
 import im.thatneko.dynamicpremium.commons.player.DynamicPlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -50,8 +52,9 @@ public class PremiumCommand extends Command {
         dynamicPlayer.kickPlayer(LegacyComponentSerializer.legacy('&').deserialize(
                 this.dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.checking")
         ));
-        cache.setPendingVerification(true);
-        cache.setOnVerification(false);
+        this.dynamicPremium.getDatabaseManager().getDatabase().updatePlayerVerification(
+                new VerificationData(dynamicPlayer.getName(), System.currentTimeMillis(), LoginTristate.PHASE_1)
+        );
         cache.setPremium(true);
     }
 }

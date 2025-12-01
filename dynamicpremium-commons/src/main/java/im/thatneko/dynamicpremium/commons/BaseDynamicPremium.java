@@ -1,5 +1,7 @@
 package im.thatneko.dynamicpremium.commons;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import im.thatneko.dynamicpremium.commons.cache.CacheManager;
 import im.thatneko.dynamicpremium.commons.command.CommandManager;
 import im.thatneko.dynamicpremium.commons.config.ConfigManager;
@@ -22,6 +24,7 @@ public class BaseDynamicPremium {
     @Getter
     private static BaseDynamicPremium instance;
 
+    private final Gson fancyGson;
     private final CacheManager cacheManager;
     private final DatabaseManager databaseManager;
     private final ConfigManager configManager;
@@ -32,6 +35,11 @@ public class BaseDynamicPremium {
 
     public BaseDynamicPremium(File baseFolder) {
         instance = this;
+
+        this.fancyGson = new GsonBuilder()
+                .setPrettyPrinting()
+                .disableHtmlEscaping()
+                .create();
 
         this.cacheManager = new CacheManager();
         this.configManager = new ConfigManager(baseFolder);

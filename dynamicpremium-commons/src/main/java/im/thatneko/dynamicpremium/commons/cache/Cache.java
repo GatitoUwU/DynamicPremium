@@ -1,5 +1,7 @@
 package im.thatneko.dynamicpremium.commons.cache;
 
+import im.thatneko.dynamicpremium.commons.database.LoginTristate;
+import im.thatneko.dynamicpremium.commons.database.data.VerificationData;
 import im.thatneko.dynamicpremium.commons.utils.UUIDUtils;
 import lombok.Data;
 
@@ -18,9 +20,8 @@ public class Cache {
     private long lastConnection;
     private UUID uuid;
 
+    private VerificationData verificationData;
     private boolean premium;
-    private boolean pendingVerification;
-    private boolean onVerification;
     private boolean notifyCannotBePremium;
     private boolean geyserUser;
 

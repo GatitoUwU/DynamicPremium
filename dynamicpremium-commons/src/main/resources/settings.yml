@@ -67,3 +67,7 @@ check-if-player-is-premium-first-time:
   #   They'll just have to relog.
   # Default is CONNECTION.
   check-method: CONNECTION
+  # The amount of time (in seconds) that the player will have to rejoin.
+  # If they don't rejoin in this time, the player will be marked
+  # as a cracked user.
+  time-to-timeout: 30

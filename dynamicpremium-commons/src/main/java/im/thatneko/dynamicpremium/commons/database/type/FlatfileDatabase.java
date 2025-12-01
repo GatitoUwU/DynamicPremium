@@ -1,8 +1,10 @@
 package im.thatneko.dynamicpremium.commons.database.type;
 
 import im.thatneko.dynamicpremium.commons.config.Config;
-import im.thatneko.dynamicpremium.commons.database.Database;
+import im.thatneko.dynamicpremium.commons.database.IDatabase;
 import im.thatneko.dynamicpremium.commons.database.DatabaseManager;
+import im.thatneko.dynamicpremium.commons.database.LoginTristate;
+import im.thatneko.dynamicpremium.commons.database.data.VerificationData;
 import im.thatneko.dynamicpremium.commons.utils.FileIO;
 import lombok.SneakyThrows;
 
@@ -15,7 +17,7 @@ import java.io.File;
  * don't remove this messages and
  * give me the credits. Arigato! n.n
  */
-public class FlatfileDatabase implements Database {
+public class FlatfileDatabase implements IDatabase {
     private DatabaseManager databaseManager;
 
     @Override
@@ -78,6 +80,32 @@ public class FlatfileDatabase implements Database {
     @Override
     public void addPremiumWasCheckedPlayer(String name) {
         getCheckedFile(name).createNewFile();
+    }
+
+    @Override
+    public void updatePlayerVerification(VerificationData verificationData) {
+        verificationData.flushToFile(getVerificationFile(verificationData.getUsername()));
+    }
+
+    @Override
+    public void removePlayerVerification(String name) {
+        getVerificationFile(name).delete();
+    }
+
+    @Override
+    public VerificationData getPlayerVerification(String name) {
+        File verificationFile = getVerificationFile(name);
+        if (verificationFile.exists()) {
+            return VerificationData.fromFile(verificationFile);
+        }
+        return new VerificationData(name, System.currentTimeMillis(), LoginTristate.NOTHING);
+    }
+
+
+    public File getVerificationFile(String name) {
+        File verificationFolder = new File(this.databaseManager.getDataFolder(), "verificationUsers");
+        verificationFolder.mkdirs();
+        return new File(verificationFolder, name + ".yml");
     }
 
     public File getCheckedFile(String name) {

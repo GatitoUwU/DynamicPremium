@@ -12,7 +12,7 @@ import java.io.File;
 @Getter
 @Setter
 public class DatabaseManager {
-    private Database database;
+    private IDatabase database;
     private final File dataFolder;
 
     public DatabaseManager(Config config, File dataFolder) {

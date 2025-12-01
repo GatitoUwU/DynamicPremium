@@ -3,7 +3,9 @@ package im.thatneko.dynamicpremium.commons.handler;
 import im.thatneko.dynamicpremium.commons.BaseDynamicPremium;
 import im.thatneko.dynamicpremium.commons.cache.Cache;
 import im.thatneko.dynamicpremium.commons.config.Config;
-import im.thatneko.dynamicpremium.commons.database.Database;
+import im.thatneko.dynamicpremium.commons.database.IDatabase;
+import im.thatneko.dynamicpremium.commons.database.LoginTristate;
+import im.thatneko.dynamicpremium.commons.database.data.VerificationData;
 import im.thatneko.dynamicpremium.commons.event.DynamicPreLoginEvent;
 import im.thatneko.dynamicpremium.commons.utils.GeyserUtils;
 import im.thatneko.dynamicpremium.commons.utils.UUIDUtils;
@@ -48,9 +50,13 @@ public class PreLoginHandler {
             }
         }
 
+        IDatabase database = this.dynamicPremium.getDatabaseManager().getDatabase();
         cache = this.dynamicPremium.getCacheManager().getOrCreateCache(event.getUsername());
         cache.setGeyserUser(false);
         cache.updateUsage();
+        VerificationData verificationData = database.getPlayerVerification(event.getUsername());
+        LoginTristate trostate = verificationData.getLoginTristate();
+        cache.setVerificationData(verificationData);
 
         if (!this.allowedNickCharacters.matcher(event.getUsername()).matches()) {
             event.computeKick(
@@ -61,16 +67,20 @@ public class PreLoginHandler {
             return;
         }
 
-        if (cache.isOnVerification()) {
-            cache.setPendingVerification(false);
-            cache.setOnVerification(false);
+        if (trostate.isOnVerification()) {
+            verificationData.setLoginTristate(LoginTristate.NOTHING);
+            database.updatePlayerVerification(verificationData);
             cache.setPremium(false);
-            cache.setNotifyCannotBePremium(false);
+            cache.setNotifyCannotBePremium(true);
         }
 
-        if (cache.isPendingVerification()) {
+        // player may be cracked in this state, so we set online state and "onVerification" to true, this means
+        // the player may get kicked, and with the check above, it'll cause the player to be set as cracked.
+        // (because no valid mojang online session)
+        if (trostate.isPendingVerification()) {
             event.markAsPremium();
-            cache.setOnVerification(true);
+            verificationData.setLoginTristate(LoginTristate.PHASE_2);
+            database.updatePlayerVerification(verificationData);
             cache.setPremium(true);
             event.lockEvent();
             event.decideIfAsync(() -> {
@@ -83,7 +93,7 @@ public class PreLoginHandler {
         event.lockEvent();
         event.decideIfAsync(() -> {
             try {
-                doPremiumVerification(event, cache);
+                doPremiumVerification(event, cache, verificationData);
             } catch (Exception e) {
                 e.printStackTrace();
                 event.computeKick(
@@ -95,14 +105,14 @@ public class PreLoginHandler {
         });
     }
 
-    public void doPremiumVerification(DynamicPreLoginEvent event, Cache cache) {
-        Database database = this.dynamicPremium.getDatabaseManager().getDatabase();
+    public void doPremiumVerification(DynamicPreLoginEvent event, Cache cache, VerificationData verificationData) {
+        IDatabase database = this.dynamicPremium.getDatabaseManager().getDatabase();
         if (database.isPlayerPremium(event.getUsername())) {
             event.markAsPremium();
             cache.setPremium(true);
         } else {
-            cache.setPremium(false);
             event.markAsNoPremium();
+            cache.setPremium(false);
 
             Config settings = this.dynamicPremium.getConfigManager().getSettingsConfig();
             String key = "check-if-player-is-premium-first-time";
@@ -113,15 +123,21 @@ public class PreLoginHandler {
                         if (UUIDUtils.getOnlineUUID(event.getUsername()) != null) {
                             event.markAsPremium();
                             cache.setPremium(true);
-                            cache.setPendingVerification(false);
-                            cache.setOnVerification(false);
+
+                            verificationData.setLoginTristate(LoginTristate.NOTHING);
+                            database.updatePlayerVerification(verificationData);
                             database.addPlayer(event.getUsername());
                         }
                     } else {
                         event.markAsPremium();
                         cache.setPremium(true);
-                        cache.setPendingVerification(false);
-                        cache.setOnVerification(true);
+                        // we set phase 2 as we already have the login (meaning there was no /premium).
+                        // so in case this fails, the phase will be 2, meaning if the player gets disconnected
+                        // because of a login error (aka, failed to authenticate with session servers),
+                        // the player will be able to rejoin as cracked without problems.
+                        verificationData.setLoginTristate(LoginTristate.PHASE_2);
+                        database.updatePlayerVerification(verificationData);
+
                         System.out.println(event.getUsername() + " is being verified by CONNECTION method.");
                     }
                 }

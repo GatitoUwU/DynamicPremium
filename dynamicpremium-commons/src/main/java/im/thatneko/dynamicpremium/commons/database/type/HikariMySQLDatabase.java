@@ -2,7 +2,7 @@ package im.thatneko.dynamicpremium.commons.database.type;
 
 import com.zaxxer.hikari.HikariDataSource;
 import im.thatneko.dynamicpremium.commons.config.Config;
-import im.thatneko.dynamicpremium.commons.database.Database;
+import im.thatneko.dynamicpremium.commons.database.AbstractSQLDatabase;
 import im.thatneko.dynamicpremium.commons.database.DatabaseManager;
 
 import java.sql.Connection;
@@ -17,8 +17,7 @@ import java.sql.SQLException;
  * don't remove this messages and
  * give me the credits. Arigato! n.n
  */
-public class HikariMySQLDatabase implements Database {
-
+public class HikariMySQLDatabase extends AbstractSQLDatabase {
     private HikariDataSource hikari;
 
     @Override
@@ -70,116 +69,7 @@ public class HikariMySQLDatabase implements Database {
         }
     }
 
-    /**
-     * Makes a request to MySQL to get if a player exist in database.
-     *
-     * @param name The player name.
-     */
     @Override
-    public boolean isPlayerPremium(String name) {
-        try (Connection connection = this.hikari.getConnection()) {
-            try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM PremiumUsers WHERE PlayerName='" + name + "'")) {
-                ResultSet rs = stmt.executeQuery();
-                boolean isPremium = (rs.next() && rs.getString("PlayerName") != null);
-                //System.out.println("IsPremium: "+isPremium);
-                rs.close();
-                return isPremium;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    /**
-     * Makes a request to MySQL to get if a player exist in database.
-     *
-     * @param name The player name.
-     */
-    @Override
-    public String getSpoofedUUID(String name) {
-        try (Connection connection = this.hikari.getConnection()) {
-            try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM SpoofedUUIDs WHERE PlayerName='" + name + "'")) {
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    String uuid = rs.getString("SpoofedUUID");
-                    if (!uuid.isEmpty()) {
-                        return uuid;
-                    }
-                }
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
-     * Creates a new user in MySQL.
-     *
-     * @param name The player name.
-     */
-    @Override
-    public void addPlayer(String name) {
-        if (!isPlayerPremium(name)) {
-            update("INSERT INTO PremiumUsers (PlayerName, Enabled) VALUES ('" + name + "', 'true')");
-        }
-    }
-
-    /**
-     * Deletes an user from MySQL.
-     *
-     * @param name: The name from user to delete on MySQL.
-     */
-    @Override
-    public void removePlayer(String name) {
-        update("DELETE FROM PremiumUsers WHERE PlayerName='" + name + "'");
-    }
-
-    /**
-     * Creates a new user in MySQL.
-     *
-     * @param name The player name.
-     */
-    @Override
-    public void addSpoofedUUID(String name, String uuid) {
-        String spoofedRequest = getSpoofedUUID(name);
-        if (spoofedRequest == null) {
-            update("INSERT INTO SpoofedUUIDs (PlayerName, SpoofedUUID) VALUES ('" + name + "', '" + uuid + "')");
-        }
-    }
-
-    /**
-     * Deletes an user from MySQL.
-     *
-     * @param name: The name from user to delete on MySQL.
-     */
-    @Override
-    public void removeSpoofedUUID(String name) {
-        update("DELETE FROM SpoofedUUIDs WHERE PlayerName='" + name + "'");
-    }
-
-    @Override
-    public boolean wasPremiumChecked(String name) {
-        try (Connection connection = this.hikari.getConnection()) {
-            try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM CheckedUsers WHERE PlayerName='" + name + "'")) {
-                ResultSet rs = stmt.executeQuery();
-                boolean isPremium = (rs.next() && rs.getString("PlayerName") != null);
-                //System.out.println("IsPremium: "+isPremium);
-                rs.close();
-                return isPremium;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    @Override
-    public void addPremiumWasCheckedPlayer(String name) {
-        if (!wasPremiumChecked(name)) {
-            update("INSERT INTO CheckedUsers (PlayerName, Enabled) VALUES ('" + name + "', 'true')");
-        }
-    }
-
     public void update(String qry) {
         try (Connection connection = this.hikari.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(qry)) {
@@ -190,12 +80,23 @@ public class HikariMySQLDatabase implements Database {
         }
     }
 
+    @Override
     public void quietUpdate(String qry) {
         try (Connection connection = hikari.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(qry)) {
                 statement.executeUpdate();
             }
         } catch (Exception e) {
+        }
+    }
+
+
+    @Override
+    public ResultSet query(String s) throws SQLException {
+        try (Connection connection = this.hikari.getConnection()) {
+            try (PreparedStatement stmt = connection.prepareStatement(s)) {
+                return stmt.executeQuery();
+            }
         }
     }
 }
