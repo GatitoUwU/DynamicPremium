@@ -1,11 +1,14 @@
 package im.thatneko.dynamicpremium.commons.database;
 
+import im.thatneko.dynamicpremium.commons.BaseDynamicPremium;
 import im.thatneko.dynamicpremium.commons.database.data.VerificationData;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public abstract class AbstractSQLDatabase implements IDatabase {
+    private boolean debugDatabaseExceptions;
+
     protected void fireUp() {
         update("CREATE TABLE IF NOT EXISTS PremiumUsers (PlayerName VARCHAR(100), Enabled VARCHAR(100))");
         update("CREATE TABLE IF NOT EXISTS CheckedUsers (PlayerName VARCHAR(100), Enabled VARCHAR(100))");
@@ -15,6 +18,8 @@ public abstract class AbstractSQLDatabase implements IDatabase {
         quietUpdate("CREATE UNIQUE INDEX checkedIndex ON CheckedUsers (PlayerName, Enabled)");
         quietUpdate("CREATE UNIQUE INDEX verifyIndex ON VerifyingUsers (PlayerName, LoginTristate, TimeToLive)");
         quietUpdate("CREATE UNIQUE INDEX uuidIndex ON SpoofedUUIDs (PlayerName, SpoofedUUID)");
+
+        this.debugDatabaseExceptions = BaseDynamicPremium.getInstance().getConfigManager().getDatabaseConfig().getBoolean("debug-sql-exceptions", false);
     }
 
     /**
@@ -29,6 +34,9 @@ public abstract class AbstractSQLDatabase implements IDatabase {
                 return (rs.next() && rs.getString("PlayerName") != null);
             }
         } catch (SQLException e) {
+            if (this.debugDatabaseExceptions) {
+                e.printStackTrace();
+            }
             return false;
         }
     }
@@ -64,6 +72,9 @@ public abstract class AbstractSQLDatabase implements IDatabase {
                 return (rs.next() && rs.getString("PlayerName") != null);
             }
         } catch (SQLException e) {
+            if (this.debugDatabaseExceptions) {
+                e.printStackTrace();
+            }
             return false;
         }
     }
@@ -101,7 +112,10 @@ public abstract class AbstractSQLDatabase implements IDatabase {
             }
             return new VerificationData(name, -1, LoginTristate.NOTHING);
         } catch (SQLException e) {
-            return null;
+            if (this.debugDatabaseExceptions) {
+                e.printStackTrace();
+            }
+            return new VerificationData(name, -1, LoginTristate.NOTHING);
         }
     }
 
@@ -141,6 +155,9 @@ public abstract class AbstractSQLDatabase implements IDatabase {
             }
             return null;
         } catch (SQLException e) {
+            if (this.debugDatabaseExceptions) {
+                e.printStackTrace();
+            }
             return null;
         }
     }

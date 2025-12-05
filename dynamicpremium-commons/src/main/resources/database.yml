@@ -2,6 +2,8 @@
 #Database types available: FLATFILE, MYSQL (connector driver, legacy), MYSQL-HIKARI (HikariCP driver)
 database-type: MYSQL-HIKARI
 
+debug-sql-exceptions: false
+
 mysql:
   host: "127.0.0.1"
   port: 3306
