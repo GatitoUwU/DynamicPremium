@@ -2,6 +2,7 @@ package im.thatneko.dynamicpremium.commons.database;
 
 import im.thatneko.dynamicpremium.commons.BaseDynamicPremium;
 import im.thatneko.dynamicpremium.commons.database.data.VerificationData;
+import im.thatneko.dynamicpremium.commons.utils.ReturnableCallback;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,9 +31,8 @@ public abstract class AbstractSQLDatabase implements IDatabase {
     @Override
     public boolean isPlayerPremium(String name) {
         try {
-            try (ResultSet rs = query("SELECT * FROM PremiumUsers WHERE PlayerName='" + name + "'")) {
-                return (rs.next() && rs.getString("PlayerName") != null);
-            }
+            return query("SELECT * FROM PremiumUsers WHERE PlayerName='" + name + "'",
+                    resultSet -> (resultSet.next() && resultSet.getString("PlayerName") != null));
         } catch (SQLException e) {
             if (this.debugDatabaseExceptions) {
                 e.printStackTrace();
@@ -68,9 +68,8 @@ public abstract class AbstractSQLDatabase implements IDatabase {
     @Override
     public boolean wasPremiumChecked(String name) {
         try {
-            try (ResultSet rs = query("SELECT * FROM CheckedUsers WHERE PlayerName='" + name + "'")) {
-                return (rs.next() && rs.getString("PlayerName") != null);
-            }
+            return query("SELECT * FROM CheckedUsers WHERE PlayerName='" + name + "'",
+                    resultSet -> (resultSet.next() && resultSet.getString("PlayerName") != null));
         } catch (SQLException e) {
             if (this.debugDatabaseExceptions) {
                 e.printStackTrace();
@@ -104,13 +103,16 @@ public abstract class AbstractSQLDatabase implements IDatabase {
 
     @Override
     public VerificationData getPlayerVerification(String name) {
-        try (ResultSet rs = query("SELECT * FROM VerifyingUsers WHERE PlayerName='" + name + "'")) {
-            if (rs.next()) {
-                String loginTristate = rs.getString("LoginTristate");
-                long timeToLive = rs.getLong("TimeToLive");
-                return new VerificationData(name, timeToLive, LoginTristate.valueOf(loginTristate));
-            }
-            return new VerificationData(name, -1, LoginTristate.NOTHING);
+        try {
+            return query("SELECT * FROM VerifyingUsers WHERE PlayerName='" + name + "'", rs -> {
+                if (rs.next()) {
+                    String loginTristate = rs.getString("LoginTristate");
+                    long timeToLive = rs.getLong("TimeToLive");
+                    return new VerificationData(name, timeToLive, LoginTristate.valueOf(loginTristate));
+                } else {
+                    return new VerificationData(name, -1, LoginTristate.NOTHING);
+                }
+            });
         } catch (SQLException e) {
             if (this.debugDatabaseExceptions) {
                 e.printStackTrace();
@@ -149,11 +151,15 @@ public abstract class AbstractSQLDatabase implements IDatabase {
      */
     @Override
     public String getSpoofedUUID(String name) {
-        try (ResultSet rs = query("SELECT * FROM SpoofedUUIDs WHERE PlayerName='" + name + "'")) {
-            if (rs.next()) {
-                return rs.getString("SpoofedUUID");
-            }
-            return null;
+        try {
+            return query("SELECT * FROM SpoofedUUIDs WHERE PlayerName='" + name + "'",
+                    resultSet -> {
+                        if (resultSet.next()) {
+                            return resultSet.getString("SpoofedUUID");
+                        } else {
+                            return null;
+                        }
+                    });
         } catch (SQLException e) {
             if (this.debugDatabaseExceptions) {
                 e.printStackTrace();
@@ -164,5 +170,5 @@ public abstract class AbstractSQLDatabase implements IDatabase {
 
     public abstract void update(String s);
     public abstract void quietUpdate(String s);
-    public abstract ResultSet query(String s) throws SQLException;
+    public abstract <R> R query(String s, ReturnableCallback<ResultSet, R> returnableCallback) throws SQLException;
 }

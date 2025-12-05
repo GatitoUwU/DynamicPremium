@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import im.thatneko.dynamicpremium.commons.config.Config;
 import im.thatneko.dynamicpremium.commons.database.AbstractSQLDatabase;
 import im.thatneko.dynamicpremium.commons.database.DatabaseManager;
+import im.thatneko.dynamicpremium.commons.utils.ReturnableCallback;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -55,12 +56,7 @@ public class HikariMySQLDatabase extends AbstractSQLDatabase {
         );
 
         try {
-            update("CREATE TABLE IF NOT EXISTS PremiumUsers (PlayerName VARCHAR(100), Enabled VARCHAR(100))");
-            update("CREATE TABLE IF NOT EXISTS CheckedUsers (PlayerName VARCHAR(100), Enabled VARCHAR(100))");
-            update("CREATE TABLE IF NOT EXISTS SpoofedUUIDs (PlayerName VARCHAR(100), SpoofedUUID VARCHAR(100))");
-            quietUpdate("CREATE UNIQUE INDEX premiumIndex ON PremiumUsers (PlayerName, Enabled)");
-            quietUpdate("CREATE UNIQUE INDEX uuidIndex ON SpoofedUUIDs (PlayerName, Enabled)");
-            quietUpdate("CREATE UNIQUE INDEX checkedIndex ON CheckedUsers (PlayerName, Enabled)");
+            fireUp();
             System.out.println("DynamicPremium > Connected to MySQL using HikariCP!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,13 +86,23 @@ public class HikariMySQLDatabase extends AbstractSQLDatabase {
         }
     }
 
-
     @Override
-    public ResultSet query(String s) throws SQLException {
+    public <R> R query(String sql, ReturnableCallback<ResultSet, R> returnableCallback) throws SQLException {
         try (Connection connection = this.hikari.getConnection()) {
-            try (PreparedStatement stmt = connection.prepareStatement(s)) {
-                return stmt.executeQuery();
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                // avoid try with resources, just to be sure ResultSet is closed after use
+                ResultSet rs = stmt.executeQuery();
+                try {
+                    return returnableCallback.call(rs);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    rs.close();
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return null;
     }
 }

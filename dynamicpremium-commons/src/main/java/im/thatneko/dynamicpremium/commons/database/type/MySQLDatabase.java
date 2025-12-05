@@ -3,6 +3,7 @@ package im.thatneko.dynamicpremium.commons.database.type;
 import im.thatneko.dynamicpremium.commons.config.Config;
 import im.thatneko.dynamicpremium.commons.database.AbstractSQLDatabase;
 import im.thatneko.dynamicpremium.commons.database.DatabaseManager;
+import im.thatneko.dynamicpremium.commons.utils.ReturnableCallback;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,8 +54,6 @@ public class MySQLDatabase extends AbstractSQLDatabase {
     }
 
 
-
-
     @Override
     public void update(String qry) {
         try {
@@ -84,11 +83,26 @@ public class MySQLDatabase extends AbstractSQLDatabase {
             stmt.executeQuery(query);
             return stmt.getResultSet();
         } catch (Exception e) {
-            System.out.println("Ha ocurrido un error I/O información:");
-            System.out.println("---------------------------------------------------------------");
-            e.printStackTrace();
-            System.out.println("---------------------------------------------------------------");
+
             return null;
         }
     }
+
+    @Override
+    public <R> R query(String sql, ReturnableCallback<ResultSet, R> returnableCallback) throws SQLException {
+        Statement stmt = this.connection.createStatement();
+        try {
+            stmt.executeQuery(sql);
+            try (ResultSet resultSet = stmt.getResultSet()) {
+                return returnableCallback.call(resultSet);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
 }
