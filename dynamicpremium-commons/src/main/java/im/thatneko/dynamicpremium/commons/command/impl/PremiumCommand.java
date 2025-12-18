@@ -39,7 +39,11 @@ public class PremiumCommand extends Command {
                 dynamicPlayer.kickPlayer(LegacyComponentSerializer.legacy('&').deserialize(
                         this.dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.premium-disabled")
                 ));
-                this.dynamicPremium.getDatabaseManager().getDatabase().removePlayer(dynamicPlayer.getName());
+                try {
+                    this.dynamicPremium.getDatabaseManager().getDatabase().removePlayer(dynamicPlayer.getName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(
                         this.dynamicPremium.getConfigManager().getMessagesConfig().getString(
@@ -52,9 +56,13 @@ public class PremiumCommand extends Command {
         dynamicPlayer.kickPlayer(LegacyComponentSerializer.legacy('&').deserialize(
                 this.dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.checking")
         ));
-        this.dynamicPremium.getDatabaseManager().getDatabase().updatePlayerVerification(
-                new VerificationData(dynamicPlayer.getName(), System.currentTimeMillis(), LoginTristate.PHASE_1)
-        );
+        try {
+            this.dynamicPremium.getDatabaseManager().getDatabase().updatePlayerVerification(
+                    new VerificationData(dynamicPlayer.getName(), System.currentTimeMillis(), LoginTristate.PHASE_1)
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         cache.setPremium(true);
     }
 }

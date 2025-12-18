@@ -33,13 +33,21 @@ public class PostLoginHandler {
         LoginTristate trostate = verificationData.getLoginTristate();
         if (trostate.isOnVerification()) {
             verificationData.setLoginTristate(LoginTristate.NOTHING);
-            this.dynamicPremium.getDatabaseManager().getDatabase().updatePlayerVerification(verificationData);
+            try {
+                this.dynamicPremium.getDatabaseManager().getDatabase().updatePlayerVerification(verificationData);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             System.out.println(dynamicPlayer.getName() + " was verified, notifying them.");
             dynamicPlayer.sendMessage(
                     LegacyComponentSerializer.legacy('&').deserialize(messages.getString("premium-command.enabled"))
             );
             CompletableFuture.runAsync(() -> {
-                this.dynamicPremium.getDatabaseManager().getDatabase().addPlayer(dynamicPlayer.getName());
+                try {
+                    this.dynamicPremium.getDatabaseManager().getDatabase().addPlayer(dynamicPlayer.getName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
         }
         if (cache.isNotifyCannotBePremium()) {

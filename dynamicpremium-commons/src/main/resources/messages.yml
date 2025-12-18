@@ -42,6 +42,12 @@ kick:
     &7&l&m----------------&b DynamicPremium &7&l&m----------------
     &7The chosen name is not allowed.
     &7&l&m------------------------------------------------
+  database-problem:
+    &7&l&m----------------&b DynamicPremium &7&l&m----------------
+    &7It seems like there's an issue while connecting your to the
+    &7server. Please, try again later.
+    &cIf the problem persists, contact an administrator.
+    &7&l&m------------------------------------------------
 send-lobby-message: "&aSending you to the lobby!"
 denied-command: "&cYou need to be authenticated in order to use this command!"
 
