@@ -50,14 +50,6 @@ public class PreLoginHandler {
             }
         }
 
-        IDatabase database = this.dynamicPremium.getDatabaseManager().getDatabase();
-        cache = this.dynamicPremium.getCacheManager().getOrCreateCache(event.getUsername());
-        cache.setGeyserUser(false);
-        cache.updateUsage();
-        VerificationData verificationData = database.getPlayerVerification(event.getUsername());
-        LoginTristate trostate = verificationData.getLoginTristate();
-        cache.setVerificationData(verificationData);
-
         if (!this.allowedNickCharacters.matcher(event.getUsername()).matches()) {
             event.computeKick(
                     LegacyComponentSerializer.legacy('&').deserialize(
@@ -66,6 +58,14 @@ public class PreLoginHandler {
             );
             return;
         }
+
+        IDatabase database = this.dynamicPremium.getDatabaseManager().getDatabase();
+        cache = this.dynamicPremium.getCacheManager().getOrCreateCache(event.getUsername());
+        cache.setGeyserUser(false);
+        cache.updateUsage();
+        VerificationData verificationData = database.getPlayerVerification(event.getUsername());
+        LoginTristate trostate = verificationData.getLoginTristate();
+        cache.setVerificationData(verificationData);
 
         if (trostate.isOnVerification()) {
             verificationData.setLoginTristate(LoginTristate.NOTHING);
