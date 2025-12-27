@@ -32,6 +32,18 @@ public class PreLoginHandler {
     private final Pattern allowedNickCharacters = Pattern.compile("[a-zA-Z0-9_]*");
 
     public void handlePreLogin(DynamicPreLoginEvent event) {
+        try {
+            handlePreLogin0(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+            event.computeKick(
+                    Component.text("An error has occurred while processing your connection. (Generic)")
+                            .color(NamedTextColor.RED)
+            );
+        }
+    }
+
+    private void handlePreLogin0(DynamicPreLoginEvent event) throws Exception {
         Config settingsConfig = this.dynamicPremium.getConfigManager().getSettingsConfig();
 
         Cache cache;
@@ -97,15 +109,17 @@ public class PreLoginHandler {
             } catch (Exception e) {
                 e.printStackTrace();
                 event.computeKick(
-                        Component.text("An error has occurred while processing your connection. (Login)")
-                                .color(NamedTextColor.RED)
+                        LegacyComponentSerializer.legacy('&').deserialize(
+                                this.dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.database-problem")
+                        )
                 );
+            } finally {
+                event.unlockEvent();
             }
-            event.unlockEvent();
         });
     }
 
-    public void doPremiumVerification(DynamicPreLoginEvent event, Cache cache, VerificationData verificationData) {
+    public void doPremiumVerification(DynamicPreLoginEvent event, Cache cache, VerificationData verificationData) throws Exception {
         IDatabase database = this.dynamicPremium.getDatabaseManager().getDatabase();
         if (database.isPlayerPremium(event.getUsername())) {
             event.markAsPremium();

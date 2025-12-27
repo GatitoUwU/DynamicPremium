@@ -43,17 +43,21 @@ public class PremiumAdminCommand extends Command {
         if (subCommand.equals("toggle")) {
             String name = args[1];
             CompletableFuture.runAsync(() -> {
-                boolean isPlayerPremium = this.dynamicPremium.getDatabaseManager().getDatabase().isPlayerPremium(name);
-                if (isPlayerPremium) {
-                    this.dynamicPremium.getDatabaseManager().getDatabase().removePlayer(name);
-                } else {
-                    this.dynamicPremium.getDatabaseManager().getDatabase().addPremiumWasCheckedPlayer(name);
-                    this.dynamicPremium.getDatabaseManager().getDatabase().addPlayer(name);
+                try {
+                    boolean isPlayerPremium = this.dynamicPremium.getDatabaseManager().getDatabase().isPlayerPremium(name);
+                    if (isPlayerPremium) {
+                        this.dynamicPremium.getDatabaseManager().getDatabase().removePlayer(name);
+                    } else {
+                        this.dynamicPremium.getDatabaseManager().getDatabase().addPremiumWasCheckedPlayer(name);
+                        this.dynamicPremium.getDatabaseManager().getDatabase().addPlayer(name);
+                    }
+                    dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(
+                            messagesConfig.getString("admin.toggled." + (isPlayerPremium ? "disabled" : "enabled"))
+                                    .replace("%player%", name)
+                    ));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(
-                        messagesConfig.getString("admin.toggled." + (isPlayerPremium ? "disabled" : "enabled"))
-                                .replace("%player%", name)
-                ));
             });
         }
     }

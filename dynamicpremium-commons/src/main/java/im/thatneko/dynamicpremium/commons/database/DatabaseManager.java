@@ -3,7 +3,6 @@ package im.thatneko.dynamicpremium.commons.database;
 import im.thatneko.dynamicpremium.commons.config.Config;
 import im.thatneko.dynamicpremium.commons.database.type.FlatfileDatabase;
 import im.thatneko.dynamicpremium.commons.database.type.HikariMySQLDatabase;
-import im.thatneko.dynamicpremium.commons.database.type.MySQLDatabase;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,8 +21,8 @@ public class DatabaseManager {
 
         switch (databaseType.toUpperCase()) {
             case "MYSQL": {
-                System.out.println("DynamicPremium > Loading MySQL database based on MySQL Connector.");
-                this.database = new MySQLDatabase();
+                System.out.println("DynamicPremium > MySQL Connector was removed, falling back to HikariCP.");
+                this.database = new HikariMySQLDatabase();
                 break;
             }
             case "MYSQL-HIKARI": {

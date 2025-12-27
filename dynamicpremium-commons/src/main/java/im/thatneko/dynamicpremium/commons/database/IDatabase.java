@@ -6,20 +6,19 @@ import im.thatneko.dynamicpremium.commons.database.data.VerificationData;
 public interface IDatabase {
     void loadDatabase(Config config, DatabaseManager databaseManager);
 
-    boolean isPlayerPremium(String name);
+    boolean isPlayerPremium(String name) throws Exception;
+    String getSpoofedUUID(String name) throws Exception;
 
-    String getSpoofedUUID(String name);
+    void addPlayer(String name) throws Exception;
+    void removePlayer(String name) throws Exception;
 
-    void addPlayer(String name);
-    void removePlayer(String name);
+    void addSpoofedUUID(String name, String uuid) throws Exception;
+    void removeSpoofedUUID(String name) throws Exception;
 
-    void addSpoofedUUID(String name, String uuid);
-    void removeSpoofedUUID(String name);
+    boolean wasPremiumChecked(String name) throws Exception;
+    void addPremiumWasCheckedPlayer(String name) throws Exception;
 
-    boolean wasPremiumChecked(String name);
-    void addPremiumWasCheckedPlayer(String name);
-
-    void updatePlayerVerification(VerificationData verificationData);
-    void removePlayerVerification(String name);
-    VerificationData getPlayerVerification(String name);
+    void updatePlayerVerification(VerificationData verificationData) throws Exception;
+    void removePlayerVerification(String name) throws Exception;
+    VerificationData getPlayerVerification(String name) throws Exception;
 }
