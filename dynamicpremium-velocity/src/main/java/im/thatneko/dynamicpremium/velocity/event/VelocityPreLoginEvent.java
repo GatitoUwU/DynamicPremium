@@ -2,6 +2,7 @@ package im.thatneko.dynamicpremium.velocity.event;
 
 import com.velocitypowered.api.event.connection.PreLoginEvent;
 import im.thatneko.dynamicpremium.commons.event.DynamicPreLoginEvent;
+import im.thatneko.dynamicpremium.velocity.utils.GeyserUtils;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 
@@ -21,6 +22,11 @@ public class VelocityPreLoginEvent implements DynamicPreLoginEvent {
     @Override
     public String getUsername() {
         return this.preLoginEvent.getUsername();
+    }
+
+    @Override
+    public Object getFloodgatePlayer() {
+        return GeyserUtils.getFloodgatePlayer(this.preLoginEvent.getConnection());
     }
 
     @Override

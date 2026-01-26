@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
 import net.md_5.bungee.api.event.PreLoginEvent;
+import org.geysermc.floodgate.api.FloodgateApi;
+import org.geysermc.floodgate.api.player.FloodgatePlayer;
 
 import java.util.UUID;
 
@@ -25,6 +27,16 @@ public class BungeePreLoginEvent implements DynamicPreLoginEvent {
     @Override
     public String getUsername() {
         return this.preLoginEvent.getConnection().getName();
+    }
+
+    @Override
+    public Object getFloodgatePlayer() {
+        for (FloodgatePlayer player : FloodgateApi.getInstance().getPlayers()) {
+            if (player.getCorrectUsername().equals(this.getUsername())) {
+                return player;
+            }
+        }
+        return null;
     }
 
     @Override

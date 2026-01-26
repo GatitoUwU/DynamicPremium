@@ -7,7 +7,6 @@ import im.thatneko.dynamicpremium.commons.database.IDatabase;
 import im.thatneko.dynamicpremium.commons.database.LoginTristate;
 import im.thatneko.dynamicpremium.commons.database.data.VerificationData;
 import im.thatneko.dynamicpremium.commons.event.DynamicPreLoginEvent;
-import im.thatneko.dynamicpremium.commons.utils.GeyserUtils;
 import im.thatneko.dynamicpremium.commons.utils.UUIDUtils;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -47,12 +46,10 @@ public class PreLoginHandler {
         Config settingsConfig = this.dynamicPremium.getConfigManager().getSettingsConfig();
 
         Cache cache;
-        // fixes the problem for the retards that have problems with floodgate
         if (settingsConfig.getBoolean("direct-login-for-geyser-users")) {
-            String startWith = settingsConfig.getString("geyser-start-name-char");
-            FloodgatePlayer floodgatePlayer = GeyserUtils.getGeyserUser(startWith + event.getUsername());
+            FloodgatePlayer floodgatePlayer = (FloodgatePlayer) event.getFloodgatePlayer();
             if (floodgatePlayer != null) {
-                cache = this.dynamicPremium.getCacheManager().getOrCreateCache(startWith + event.getUsername());
+                cache = this.dynamicPremium.getCacheManager().getOrCreateCache(floodgatePlayer.getCorrectUsername());
                 cache.setUuid((UUID) null);
                 cache.updateUsage();
                 cache.setPremium(false);

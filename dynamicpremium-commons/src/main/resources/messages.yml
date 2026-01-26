@@ -42,6 +42,11 @@ kick:
     &7&l&m----------------&b DynamicPremium &7&l&m----------------
     &7The chosen name is not allowed.
     &7&l&m------------------------------------------------
+  non-bedrock-player:
+    &7&l&m----------------&b DynamicPremium &7&l&m----------------
+    &7You seem to have logged in with a &bJava Edition &7client using a
+    &bBedrock Edition &7account. Therefor, your connection was cancelled.
+    &7&l&m------------------------------------------------
   database-problem:
     &7&l&m----------------&b DynamicPremium &7&l&m----------------
     &7It seems like there's an issue while connecting your to the

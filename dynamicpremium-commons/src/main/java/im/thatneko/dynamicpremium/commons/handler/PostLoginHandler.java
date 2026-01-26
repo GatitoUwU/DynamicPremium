@@ -9,6 +9,7 @@ import im.thatneko.dynamicpremium.commons.event.DynamicPostLoginEvent;
 import im.thatneko.dynamicpremium.commons.player.DynamicPlayer;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,11 +25,29 @@ public class PostLoginHandler {
     private final BaseDynamicPremium dynamicPremium;
 
     public void handlePostLogin(DynamicPostLoginEvent event) {
+        Config settingsConfig = this.dynamicPremium.getConfigManager().getSettingsConfig();
+        Config messagesConfig = this.dynamicPremium.getConfigManager().getMessagesConfig();
+
         DynamicPlayer dynamicPlayer = event.getDynamicPlayer();
+
+        if (settingsConfig.getBoolean("direct-login-for-geyser-users")) {
+            String startWith = settingsConfig.getString("geyser-start-name-char");
+            // if the player is a geyser user, they should have a valid bedrock uuid.
+            // so first, let's ensure they are a bedrock player.
+            if (dynamicPlayer.getName().startsWith(startWith)) {
+                // in case the UUID is not a floodgate one, kick the player.
+                if (!FloodgateApi.getInstance().isFloodgateId(dynamicPlayer.getUniqueId())) {
+                    dynamicPlayer.sendMessage(
+                            LegacyComponentSerializer.legacy('&').deserialize(messagesConfig.getString("kick.non-bedrock-player"))
+                    );
+                }
+                return;
+            }
+        }
+
         Cache cache = this.dynamicPremium.getCacheManager().getOrCreateCache(dynamicPlayer.getName());
         cache.updateUsage();
 
-        Config messages = this.dynamicPremium.getConfigManager().getMessagesConfig();
         VerificationData verificationData = cache.getVerificationData();
         LoginTristate trostate = verificationData.getLoginTristate();
         if (trostate.isOnVerification()) {
@@ -40,7 +59,7 @@ public class PostLoginHandler {
             }
             System.out.println(dynamicPlayer.getName() + " was verified, notifying them.");
             dynamicPlayer.sendMessage(
-                    LegacyComponentSerializer.legacy('&').deserialize(messages.getString("premium-command.enabled"))
+                    LegacyComponentSerializer.legacy('&').deserialize(messagesConfig.getString("premium-command.enabled"))
             );
             CompletableFuture.runAsync(() -> {
                 try {
@@ -54,7 +73,7 @@ public class PostLoginHandler {
             cache.setNotifyCannotBePremium(false);
             System.out.println(dynamicPlayer.getName() + " wasn't able to be verified, notifying them.");
             dynamicPlayer.sendMessage(
-                    LegacyComponentSerializer.legacy('&').deserialize(messages.getString("premium-command.no-premium"))
+                    LegacyComponentSerializer.legacy('&').deserialize(messagesConfig.getString("premium-command.no-premium"))
             );
         }
     }

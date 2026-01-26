@@ -24,19 +24,23 @@ import java.util.logging.Logger;
 @Plugin(
         id = "dynamicpremium-velocity",
         name = "DynamicPremium",
-        version = "2.0.4",
+        version = "2.0.5",
         description = "The simplest /premium plugin ever.",
         url = "https://thatneko.im",
         authors = {"gatogamer"}
 )
 @Getter
 public class DynamicPremium extends BaseDynamicPremium {
+    @Getter
+    private static DynamicPremium instance;
+
     private ProxyServer proxyServer;
     private Logger logger;
 
     @Inject
     public DynamicPremium(ProxyServer proxyServer, Logger logger, @DataDirectory Path dataFolder) {
         super(dataFolder.toFile());
+        instance = this;
         this.proxyServer = proxyServer;
         this.logger = logger;
     }

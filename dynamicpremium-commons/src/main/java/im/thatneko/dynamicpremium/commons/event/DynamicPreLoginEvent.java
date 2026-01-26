@@ -14,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface DynamicPreLoginEvent {
     String getUsername();
+    Object getFloodgatePlayer();
 
     void lockEvent();
     void unlockEvent();
