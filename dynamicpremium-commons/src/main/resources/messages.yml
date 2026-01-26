@@ -59,6 +59,7 @@ denied-command: "&cYou need to be authenticated in order to use this command!"
 premium-command:
   player-only: "&cYou need to be an user to use this"
   no-premium: "&cWe were not able to verify the identity of your account."
+  add-confirm-argument: "&cTo avoid mistakes, please confirm that you want to enable premium authentication by using &e/premium confirm&c."
   enabled: "&aIdentity verified, now you'll not need to put your password :D"
   disabled: "&aYou've disabled the premium-mode"
   config-disabled: "&aThis commands has been disabled by an administrator!"

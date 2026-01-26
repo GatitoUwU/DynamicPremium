@@ -3,6 +3,7 @@ package im.thatneko.dynamicpremium.commons.command.impl;
 import im.thatneko.dynamicpremium.commons.BaseDynamicPremium;
 import im.thatneko.dynamicpremium.commons.cache.Cache;
 import im.thatneko.dynamicpremium.commons.command.Command;
+import im.thatneko.dynamicpremium.commons.config.Config;
 import im.thatneko.dynamicpremium.commons.database.LoginTristate;
 import im.thatneko.dynamicpremium.commons.database.data.VerificationData;
 import im.thatneko.dynamicpremium.commons.player.DynamicPlayer;
@@ -32,12 +33,14 @@ public class PremiumCommand extends Command {
             return;
         }
 
+        Config messagesConfig = this.dynamicPremium.getConfigManager().getMessagesConfig();
+        Config settingsConfig = this.dynamicPremium.getConfigManager().getSettingsConfig();
         Cache cache = this.dynamicPremium.getCacheManager().getOrCreateCache(dynamicPlayer.getName());
         if (cache.isPremium()) {
             if (this.dynamicPremium.getConfigManager().getSettingsConfig().getBoolean("allow-disable-premium")) {
                 cache.setPremium(false);
                 dynamicPlayer.kickPlayer(LegacyComponentSerializer.legacy('&').deserialize(
-                        this.dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.premium-disabled")
+                        messagesConfig.getString("kick.premium-disabled")
                 ));
                 try {
                     this.dynamicPremium.getDatabaseManager().getDatabase().removePlayer(dynamicPlayer.getName());
@@ -46,15 +49,25 @@ public class PremiumCommand extends Command {
                 }
             } else {
                 dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(
-                        this.dynamicPremium.getConfigManager().getMessagesConfig().getString(
+                        messagesConfig.getString(
                                 "premium-command.config-disabled"
                         )
                 ));
             }
             return;
         }
+        if (settingsConfig.getBoolean("ask-for-premium-confirmation")) {
+            if (args.length == 0 || !args[0].equalsIgnoreCase("confirm")) {
+                dynamicPlayer.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(
+                        messagesConfig.getString(
+                                "premium-command.add-confirm-argument"
+                        )
+                ));
+                return;
+            }
+        }
         dynamicPlayer.kickPlayer(LegacyComponentSerializer.legacy('&').deserialize(
-                this.dynamicPremium.getConfigManager().getMessagesConfig().getString("kick.checking")
+                messagesConfig.getString("kick.checking")
         ));
         try {
             this.dynamicPremium.getDatabaseManager().getDatabase().updatePlayerVerification(

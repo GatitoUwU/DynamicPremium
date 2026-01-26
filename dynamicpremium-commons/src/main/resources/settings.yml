@@ -23,6 +23,9 @@ lobby-server: "lobby"
 # If you enable this, players will be able to disable /premium authentication by themselves.
 # It's recommended to leave this disabled if your UUID mode is "PREMIUM".
 allow-disable-premium: false
+# Shall we ask for confirmation when players use /premium to enable premium authentication?
+# Recommended to leave this enabled to avoid mistakes.
+ask-for-premium-confirmation: true
 # Shall we ignore /login for authenticated Geyser users?
 # REQUIRES FLOODGATE!
 direct-login-for-geyser-users: false
